@@ -1,0 +1,47 @@
+from sqlalchemy import ARRAY, UUID, Boolean, Column, ForeignKey, LargeBinary, Numeric, String
+from sqlalchemy.orm import declarative_base, relationship
+from uuid import uuid4
+
+Base = declarative_base()
+
+class Brand(Base):
+	__tablename__ = "brands"
+
+	uuid = Column(UUID, primary_key=True, index=True, default=uuid4)
+	email = Column(String, unique=True, index=True)
+	hashed_password = Column(String)
+	telegram_id = Column(String)
+	brand_name = Column(String, unique=True)
+	brand_description = Column(String)
+	social_links = Column(ARRAY(String))
+	brand_logo_uuid = Column(UUID, index=True, default=uuid4)
+	brand_banners_uuid = Column(UUID, index=True, default=uuid4)
+
+	goods = relationship("Goods", back_populates="brand")
+
+
+class Media(Base):
+	__tablename__ = "media"
+
+	uuid = Column(UUID, primary_key=True, index=True, default=uuid4)
+	brand_uuid = Column(UUID, ForeignKey("brands.uuid"))
+	refers_to_uuid = Column(UUID, index=True)
+	media_data = Column(LargeBinary)
+	
+	
+class Goods(Base):
+	__tablename__ = "goods"
+
+	uuid = Column(UUID, primary_key=True, index=True, default=uuid4)
+	brand_uuid = Column(UUID, ForeignKey("brands.uuid"))
+	name = Column(String(100))
+	description = Column(String(500))
+	sizes = Column(ARRAY(String(20)))
+	price = Column(Numeric(10, 2))
+	images_uuid = Column(UUID, index=True, default=uuid4)
+
+	brand = relationship("Brand", back_populates="goods")
+	
+	
+	
+
