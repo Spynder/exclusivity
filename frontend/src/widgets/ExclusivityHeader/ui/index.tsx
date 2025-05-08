@@ -7,8 +7,9 @@ export function ExclusivityHeader() {
 		<header className="container mt-8 justify-between text-center flex h-8 items-center border-b py-8">
 			<div className="flex space-x-4 grow basis-0">
 				<NavButton href="/">Главная</NavButton>
-				<NavButton href="/brands">Бренды</NavButton>
-				<NavButton href="/catalog">Каталог</NavButton>
+				<NavButton href="/brand">Бренды</NavButton>
+				<NavButton href="/goods">Каталог</NavButton>
+				<NavButton href="/services">Услуги</NavButton>
 			</div>
 			<Image
 				src="/logo.svg"

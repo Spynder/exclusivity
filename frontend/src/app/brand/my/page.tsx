@@ -7,7 +7,8 @@ import apiFetch from "@utils/apiFetch";
 import { useEffect, useRef, useState } from "react";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from 'swiper/modules';
+import { Swiper as SwiperClass } from "swiper/types";
+import { GoodsGrid } from "@widgets";
 
 export default function MyBrandPage() {
 
@@ -80,12 +81,7 @@ export default function MyBrandPage() {
 					Сохранить
 				</button>
 			</div>
-			<div className="container grid grid-cols-3 gap-4 py-20">
-				<GoodsButton createButton name="Новый товар" />
-				{goods.map((item) => (
-					<GoodsButton key={item.uuid} image_uuid={item.images_uuid} name={item.name} price={item.price} />
-				))}
-			</div>
+			<GoodsGrid goods={goods} editing/>
 		</>
 	)
 }
@@ -96,8 +92,6 @@ function UploadLogo({brand_logo_uuid}: Readonly<{brand_logo_uuid?: string}>) {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	function uploadProfileImage(file: File) {
-		// Handle the uploaded file here
-		console.log("File received:", file);
 
 		function onSuccess(res: Response) {
 			res.json().then((json: {uuid: string}) => {
@@ -123,7 +117,7 @@ function UploadLogo({brand_logo_uuid}: Readonly<{brand_logo_uuid?: string}>) {
 		if(!media) return;
 
 		function onSuccess(res: Response) {
-			setMedia(undefined);
+			setMedia([]);
 		}
 		
 		apiFetch({
@@ -179,17 +173,26 @@ function UploadLogo({brand_logo_uuid}: Readonly<{brand_logo_uuid?: string}>) {
 }
 
 function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: string}>) {
-	const { media, setMedia } = useReferringMedia(brand_banners_uuid);
+	const { media, setMedia, refresh } = useReferringMedia(brand_banners_uuid);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [selectedBanner, setSelectedBanner] = useState(0);
+	const swiperRef = useRef<SwiperClass>(null);
+
+	useEffect(() => {
+		let roundedBanner = (selectedBanner + media.length) % media.length;
+		roundedBanner = isNaN(roundedBanner) ? 0 : roundedBanner;
+		setSelectedBanner(roundedBanner);
+		swiperRef.current?.update();
+		swiperRef.current?.slideTo(roundedBanner);
+	}, [media]);
 
 	function uploadBanner(file: File) {
 		// Handle the uploaded file here
 		console.log("File received:", file);
 
-		function onSuccess(res: Response) {
-			res.json().then((json: {uuid: string}) => {
-				setMedia([json.uuid]);
-			})
+		async function onSuccess(res: Response) {
+			setSelectedBanner(media.length);
+			refresh();
 		}
 
 		const uploadData = new FormData();
@@ -210,11 +213,18 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 		if(!media) return;
 
 		function onSuccess(res: Response) {
-			setMedia(undefined);
+			// setMedia((prev) => {
+			// 	const copy = prev
+			// 	copy.splice(selectedBanner, 1);
+			// 	return copy;
+			// });
+			
+			setSelectedBanner(media.length-2);
+			refresh();
 		}
 		
 		apiFetch({
-			endpoint: `/api/v1/media/${media[0]}`,
+			endpoint: `/api/v1/media/${media[selectedBanner]}`,
 			options: {
 				method: "DELETE"
 			},
@@ -225,21 +235,19 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 
 	return (
 		<div className="flex gap-4">
-			<div className="aspect-[1316/513] h-full">
+			<div className="aspect-[1316/513] h-full" suppressHydrationWarning>
 				<Swiper
 					slidesPerView="auto"
 					spaceBetween={50}
-					autoplay={{
-						delay: 2500,
-						disableOnInteraction: false,
-					}}
 					loop={true}
 					className="w-full h-full"
-					modules={[Autoplay]}
+					onSwiper={(swiper) => swiperRef.current = swiper}
+					onSlideChange={(swiper) => setSelectedBanner(
+						isNaN(swiper.realIndex) ? 0 : swiper.realIndex)}
 					>
 						{media?.map((uuid) => (
 							<SwiperSlide key={uuid}>
-								<MediaImage className="" media_uuid={uuid}/>
+								<MediaImage className="w-full" media_uuid={uuid}/>
 							</SwiperSlide>
 						))}
 				</Swiper>
@@ -248,7 +256,7 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 			
 			<div className="flex flex-col gap-2 uppercase text-foreground/50 font-medium">
 				<div className="flex text-xl text-black justify-between">
-					<span>Баннеры</span><span>2/4</span>
+					<span>Баннеры</span><span>{media?.length ?? 0}/4</span>
 				</div>
 				<div className="flex">
 					<p className="w-20">Формат: </p><span className="text-black">SVG, PNG, JPG</span>

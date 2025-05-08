@@ -70,6 +70,14 @@ async def upload_banner(
 
 	return await MediaService.upload(db, brand_uuid, brand_banners_uuid, file)
 
+@media_router.post("/image")
+async def upload_image(
+	db: db_dependency,
+	file: UploadFile = File(...),
+	brand_uuid: UUID = Depends(get_current_brand)
+):
+	return await MediaService.upload(db, brand_uuid, None, file)
+
 
 @media_router.delete("/{uuid}")
 async def delete_media(

@@ -1,24 +1,17 @@
+import { BrandData } from "@entities";
+import { useReferringMedia } from "@shared/hooks/useReferringMedia";
+import { MediaImage } from "@ui";
 import Image from "next/image";
 
-interface BrandButtonProps {
-	src?: string;
-	title?: string;
-	description?: string;
-	positions?: number;
-}
+export function BrandButton({brandData}: Readonly<{brandData: BrandData}>) {
+	const { media } = useReferringMedia(brandData.brand.brand_logo_uuid);
 
-export function BrandButton({
-	src,
-	title="Real Style",
-	description="Верхняя одежда",
-	positions=26,
-}: Readonly<BrandButtonProps>) {
 	return (
 		<div className="flex flex-col space-y-2">
 			<div className="h-52 w-full">
 				{
-					src ? (
-						<Image src={src} alt={title} fill />
+					media ? (
+						<MediaImage media_uuid={media[0]}/>
 					) : (
 						<div className="h-52 w-full bg-gray-100 flex items-center justify-center">
 							<Image src="/no-image.svg" alt="no-image" width={50} height={50} />
@@ -26,10 +19,10 @@ export function BrandButton({
 					)
 				}
 			</div>
-			<span className="text-2xl font-medium uppercase">{title}</span>
+			<span className="text-2xl font-medium uppercase">{brandData.brand.brand_name}</span>
 			<div className="flex flex-row justify-between text-gray-600">
-				<span>{description}</span>
-				<span>{positions} позиций в каталоге</span>
+				<span>{brandData.brand.brand_description}</span>
+				<span>{brandData.goods.length} позиций в каталоге</span>
 			</div>
 		</div>
 

@@ -1,8 +1,15 @@
-from sqlalchemy import ARRAY, UUID, Boolean, Column, ForeignKey, LargeBinary, Numeric, String
+import datetime
+from sqlalchemy import ARRAY, UUID, Boolean, Column, DateTime, ForeignKey, LargeBinary, Numeric, String
 from sqlalchemy.orm import declarative_base, relationship
 from uuid import uuid4
 
-Base = declarative_base()
+class TimestampMixin:
+    created_at = Column(DateTime, nullable=False, default=datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(DateTime, nullable=False, default=datetime.datetime.now(datetime.timezone.utc), 
+                        onupdate=datetime.datetime.now(datetime.timezone.utc))
+
+Base = declarative_base(cls=TimestampMixin)
+
 
 class Brand(Base):
 	__tablename__ = "brands"

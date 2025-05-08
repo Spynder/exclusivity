@@ -15,8 +15,9 @@ export function ExclusivityFooter() {
 				/>
 				<div className="flex flex-row ms-auto space-x-4 items-center">
 					<NavButton href="/">Главная</NavButton>
-					<NavButton href="/brands">Бренды</NavButton>
-					<NavButton href="/catalog">Каталог</NavButton>
+					<NavButton href="/brand">Бренды</NavButton>
+					<NavButton href="/goods">Каталог</NavButton>
+					<NavButton href="/services">Услуги</NavButton>
 					<NavButton href="/about">О сервисе</NavButton>
 					<NavButton href="/brand/my" authorized>Мой бренд</NavButton>
 					<NavButton href="/profile" authorized>Профиль</NavButton>

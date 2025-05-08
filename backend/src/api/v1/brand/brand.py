@@ -3,15 +3,30 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from starlette import status
 
-from src.api.v1.goods.goods import get_goods_of_brand
 from src.models.dto import BrandUpdate
-from src.models.responses import BrandResponse, BrandModel
-from src.database import Brand, db_dependency
+from src.models.responses import BrandResponse, BrandModel, GoodsModel
+from src.database import Goods, Brand, db_dependency
 from src.utils import get_current_brand
 
 brand_router = APIRouter(
 	prefix="/brand"
 )
+
+async def get_goods_of_brand(
+		db: db_dependency,
+		brand_uuid: UUID,
+):
+	goods = db.query(Goods).where(Goods.brand_uuid == brand_uuid).all()
+	return [GoodsModel(
+        uuid=good.uuid,
+        brand_uuid=good.brand_uuid,
+        name=good.name,
+        description=good.description or "",
+        sizes=good.sizes,
+        price=good.price,
+        images_uuid=good.images_uuid
+	) for good in goods]
+
 
 @brand_router.get("")
 async def get_brand(

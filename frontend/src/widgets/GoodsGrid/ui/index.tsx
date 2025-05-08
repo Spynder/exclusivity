@@ -1,34 +1,26 @@
 "use client";
 
+import { Goods } from "@entities";
 import { useApi } from "@hooks";
 import { GoodsButton } from "@ui";
 
-interface Goods {
-	uuid: string // uuid
-	brand_uuid: string // uuid
-	name: string
-	description?: string
-	sizes: string[]
-	price: number
-	images_uuid: string // uuid
+interface GoodsGridProps {
+	goods: Goods[],
+	editing?: boolean
 }
 
-export function GoodsGrid() {
-	const { data } = useApi<Goods[]>("/api/v1/goods", {
-		authorize: true
-	});
-
+export function GoodsGrid({
+	goods, editing
+}: Readonly<GoodsGridProps>) {
 	return (
 		<div className="container grid grid-cols-3 gap-4 py-20">
+			{ editing && 
+				<GoodsButton createButton/>
+			}
 			{
-				data ? (
-					data.map((goods, i) => (
-						<GoodsButton
-							image_uuid={`/goods/${i%3+1}.png`}
-							name={goods.name}
-							price={goods.price}
-							key={goods.uuid}
-						/>
+				goods ? (
+					goods.map((good, i) => (
+						<GoodsButton key={good.uuid} goods={good} editing={editing}/>
 					))
 				) : (
 					<p>Loading</p>

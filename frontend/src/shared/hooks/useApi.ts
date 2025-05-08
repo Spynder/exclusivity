@@ -14,11 +14,11 @@ export function useApi<T>(endpoint: string, options?: {params?: object, authoriz
 	let loadingState: LoadingState = "Success";
 
 	// addition for correct serialization in localStorage memory.
-	const getString = options?.params ?
-	new URLSearchParams(
-		Object.fromEntries(Object.entries(options?.params))
-	).toString()
-	: "";
+	const getString = options?.params
+		? new URLSearchParams(
+			Object.fromEntries(Object.entries(options?.params))
+		).toString()
+		: "";
 	
 	const swr = useSWR(endpoint+getString, () => {
 		return new Promise((resolve, reject) => {

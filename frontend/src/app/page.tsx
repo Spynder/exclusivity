@@ -1,14 +1,22 @@
+"use client";
+
+import { BrandData, Goods } from "@entities";
+import { useApi } from "@hooks";
 import { LandingBanner, BrandGrid, InvitationBanner, GoodsGrid } from "@widgets";
+
 export default function Home() {
+	const { data: brands } = useApi<BrandData[]>("/api/v1/brand");
+	const { data: goods } = useApi<Goods[]>("/api/v1/goods");
+
 	return (
 		<>
 			<LandingBanner/>
-			<BrandGrid/>
+			<BrandGrid brands={brands ?? []}/>
 			<InvitationBanner/>
-			<GoodsGrid/>
+			<GoodsGrid goods={goods ?? []}/>
 			<LandingBanner/>
-			<BrandGrid/>
-			<GoodsGrid/>
+			<BrandGrid brands={brands ?? []}/>
+			<GoodsGrid goods={goods ?? []}/>
 		</>
 	)
 }

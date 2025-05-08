@@ -4,7 +4,7 @@ import apiFetch from "@utils/apiFetch";
 import { useEffect, useState } from "react";
 
 export function useReferringMedia(media_uuid_hook?: string) {
-	const [media, setMedia] = useState<string[]>();
+	const [media, setMedia] = useState<string[]>([]);
 
 	function onSuccess(res: Response) {
 		res.json().then((json: string[]) => {
