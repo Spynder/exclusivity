@@ -2,7 +2,7 @@
 
 import { getCookie } from "cookies-next/client";
 import Link from "next/link";
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { ReactNode, useEffect, useState } from "react";
 
 interface NavButtonProps {
@@ -16,7 +16,6 @@ export function NavButton({
 }: Readonly<NavButtonProps>) {
 	const [usedHref, setUsedHref] = useState(href ?? "/");
 	const pathname = usePathname();
-	const searchParams = useSearchParams();
 
 	useEffect(() => {
 		const accessToken = getCookie("access_token");
@@ -25,7 +24,7 @@ export function NavButton({
 		} else {
 			setUsedHref(href ?? "/");
 		}
-	}, [pathname, searchParams]);
+	}, [pathname]);
 
 
 	return (
