@@ -13,7 +13,6 @@ export default function RegisterPage() {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
-        const email = formData.get("email");
         const brand_name = formData.get("brand_name");
         const telegram_id = formData.get("telegram_id");
         const password = formData.get("password");
@@ -33,7 +32,6 @@ export default function RegisterPage() {
         apiFetch({
             endpoint: "/api/v1/register",
             data: {
-                email,
 				brand_name,
 				telegram_id,
                 password,
@@ -54,7 +52,6 @@ export default function RegisterPage() {
                     <Link href="/login" className="basis-0 grow p-3">Вход</Link>
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-                    <TextInput placeholder="E-mail" name="email" />
                     <TextInput placeholder="Имя бренда" name="brand_name" />
                     <TextInput placeholder="Telegram" name="telegram_id" />
                     <TextInput type="password" placeholder="Пароль" name="password" />

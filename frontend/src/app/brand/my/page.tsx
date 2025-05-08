@@ -23,9 +23,9 @@ export default function MyBrandPage() {
 
 	useEffect(() => {
 		if(!data) return;
-		setBrandName(data.brand.brand_name);
-		setBrandDescription(data.brand.brand_description ?? "");
-		setSocialLinks((data.brand.social_links ?? []).join(', '));
+		setBrandName(data.brand?.brand_name ?? "");
+		setBrandDescription(data.brand?.brand_description ?? "");
+		setSocialLinks((data.brand?.social_links ?? []).join(', '));
 		setGoods(data.goods);
 	}, [data]);
 
@@ -55,8 +55,8 @@ export default function MyBrandPage() {
 			<div className="container flex flex-col gap-8">
 				<div className="flex h-65 gap-4 justify-between">
 					
-					<UploadLogo brand_logo_uuid={data?.brand.brand_logo_uuid} />
-					<UploadBanner brand_banners_uuid={data?.brand.brand_banners_uuid} />
+					<UploadLogo brand_logo_uuid={data?.brand?.brand_logo_uuid} />
+					<UploadBanner brand_banners_uuid={data?.brand?.brand_banners_uuid} />
 				</div>
 					
 				<div className="flex flex-col container gap-2 text-xl font-medium">

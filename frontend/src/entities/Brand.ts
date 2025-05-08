@@ -2,7 +2,6 @@ import { Goods } from "@entities";
 
 export interface Brand {
 	uuid: string; // uuid
-	email: string;
 	telegram_id: string;
 	brand_name: string;
 	brand_description?: string;
@@ -12,6 +11,6 @@ export interface Brand {
 }
 
 export interface BrandData {
-	brand: Brand
+	brand?: Brand
 	goods: Goods[]
 }

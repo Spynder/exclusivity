@@ -19,12 +19,12 @@ services:
       - app-network
     
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "4000:4000"
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4000:4000"
   
   db:
     image: postgres

@@ -13,9 +13,9 @@ login_router = APIRouter(
 
 @login_router.post("")
 async def login(data: LoginData, db: db_dependency):
-    brand = db.query(Brand).filter(Brand.email == data.email).first()
+    brand = db.query(Brand).filter(Brand.brand_name == data.brand_name).first()
     if brand is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No user with this email")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No such brand found")
     if not PasswordManager.verify_password(data.password, brand.hashed_password):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid password")
     

@@ -22,12 +22,12 @@ export default function ProfilePage() {
     return (
         <div className="flex flex-col container gap-2 text-xl font-medium">
             <div className="flex items-top gap-2">
-                <span className="w-40 text-[#161616] opacity-50">Почта: </span>
-                <TextInput end value={data?.brand.email ?? ""} disabled/>
+                <span className="w-40 text-[#161616] opacity-50">Бренд: </span>
+                <TextInput end value={data?.brand?.brand_name ?? ""} disabled/>
             </div>
             <div className="flex items-top gap-2">
-                <span className="w-40 text-[#161616] opacity-50">Бренд: </span>
-                <TextInput end value={data?.brand.brand_name ?? ""} disabled/>
+                <span className="w-40 text-[#161616] opacity-50">Телеграм: </span>
+                <TextInput end value={data?.brand?.telegram_id ?? ""} disabled/>
             </div>
             <Button onClick={logout}>
                 Выйти из аккаунта

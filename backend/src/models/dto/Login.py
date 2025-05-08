@@ -2,6 +2,6 @@ from pydantic import BaseModel
 
 
 class LoginData(BaseModel):
-    email: str
+    brand_name: str
     password: str
 

@@ -13,7 +13,7 @@ export default function LoginPage() {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
-        const email = formData.get("email");
+        const brand_name = formData.get("brand_name");
         const password = formData.get("password");
 
         async function success(res: Response) {
@@ -30,7 +30,7 @@ export default function LoginPage() {
         apiFetch({
             endpoint: "/api/v1/login",
             data: {
-                email,
+                brand_name,
                 password
             },
             authorize: false,
@@ -47,7 +47,7 @@ export default function LoginPage() {
                     <Link href="#" className="border-b-2 basis-0 grow p-3">Вход</Link>
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-                    <TextInput placeholder="E-mail" name="email" />
+                    <TextInput placeholder="Имя бренда" name="brand_name" />
                     <TextInput type="password" placeholder="Пароль" name="password" />
                     <button className="bg-foreground text-white text-xl px-4 py-3 border-0 w-full cursor-pointer">Войти</button>
                 </form>

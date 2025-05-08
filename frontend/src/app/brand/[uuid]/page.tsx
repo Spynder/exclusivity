@@ -14,7 +14,7 @@ export default function BrandPage() {
 	const { data } = useApi<BrandData>(`/api/v1/brand/${params.uuid}`);
 	return (
 		<>
-			<LandingBanner/>
+			<LandingBanner uuid={params.uuid}/>
 
 			<BrandView brandData={data}/>
 

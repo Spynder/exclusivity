@@ -13,7 +13,7 @@ export function BrandButton({brandData}: Readonly<BrandButtonProps>) {
 
 	return (
 		<Link href={`/brand/${brandData.brand.uuid}`} className="flex flex-col space-y-2">
-			<div className="max-h-52 w-full">
+			<div className="aspect-square md:aspect-auto md:h-52 w-full">
 				{
 					media ? (
 						<MediaImage media_uuid={media[0]} className="cursor-pointer h-full w-full"/>

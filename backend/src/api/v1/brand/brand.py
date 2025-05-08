@@ -38,7 +38,6 @@ async def get_brand(
 		BrandResponse(
 			brand=BrandModel(
 				uuid=brand.uuid,
-				email=brand.email,
 				brand_name=brand.brand_name,
 				telegram_id=brand.telegram_id,
 				brand_description=brand.brand_description,
@@ -70,7 +69,6 @@ async def get_brand(
 	
 	brand_model = BrandModel(
 		uuid=brand.uuid,
-		email=brand.email,
 		brand_name=brand.brand_name,
 		telegram_id=brand.telegram_id,
 		brand_description=brand.brand_description,

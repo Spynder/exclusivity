@@ -1,7 +1,6 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 class RegisterData(BaseModel):
-    email: EmailStr
     password: str
     confirm_password: str
     brand_name: str

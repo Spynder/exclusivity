@@ -15,10 +15,9 @@ class Brand(Base):
 	__tablename__ = "brands"
 
 	uuid = Column(UUID, primary_key=True, index=True, default=uuid4)
-	email = Column(String, unique=True, index=True)
+	brand_name = Column(String, unique=True)
 	hashed_password = Column(String)
 	telegram_id = Column(String)
-	brand_name = Column(String, unique=True)
 	brand_description = Column(String)
 	social_links = Column(ARRAY(String))
 	brand_logo_uuid = Column(UUID, index=True, default=uuid4)

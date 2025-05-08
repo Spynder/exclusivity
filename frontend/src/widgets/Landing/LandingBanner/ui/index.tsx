@@ -3,36 +3,30 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import { BrandData } from '@entities';
+import { useApi, useApiUrl } from '@hooks';
+import { useReferringMedia } from '@shared/hooks/useReferringMedia';
+import { useEffect, useState } from 'react';
 
-const bannerConfig: BannerSlideProps[] = [
-	{
-		src: '/banner/1.png',
-		title: 'Brand name',
-		description: 'Коллекция зима-осень теперь доступна!',
-	},
-	{
-		src: '/banner/2.jpg',
-		title: 'Brand name',
-		description: 'Коллекция зима-осень теперь доступна!',
-	},
-	{
-		src: '/banner/3.jpg',
-		title: 'Brand name',
-		description: 'Коллекция зима-осень теперь доступна!',
-	},
-	{
-		src: '/banner/4.jpg',
-		title: 'Brand name',
-		description: 'Коллекция зима-осень теперь доступна!',
-	},
-	{
-		src: '/banner/5.jpg',
-		title: 'Brand name',
-		description: 'Коллекция зима-осень теперь доступна!',
-	},
-]
+interface LandingBannerProps {
+	uuid: string;
+}
 
-export function LandingBanner() {
+export function LandingBanner({
+	uuid
+}: Readonly<LandingBannerProps>) {
+	const { data } = useApi<BrandData>(`/api/v1/brand/${uuid}`);
+	const [mediaUUID, setMediaUUID] = useState<string>();
+	const { media } = useReferringMedia(mediaUUID);
+
+	useEffect(() => {
+		if(!data) return;
+		setMediaUUID(data.brand?.brand_banners_uuid);
+		console.log(mediaUUID)
+	}, [data]);
+
+	if(!media || !media.length) return null;
+
 	return (
 		<div className="w-full h-[60vh]">
 			<Swiper
@@ -46,9 +40,9 @@ export function LandingBanner() {
 				className="container h-full"
 				modules={[Autoplay]}
 				>
-					{bannerConfig.map((slide) => (
-						<SwiperSlide key={slide.src}>
-							<BannerSlide {...slide}/>
+					{media.map((slide) => (
+						<SwiperSlide key={slide}>
+							<BannerSlide media_uuid={slide} title={data?.brand?.brand_name}/>
 						</SwiperSlide>
 					))}
 			</Swiper>
@@ -57,19 +51,22 @@ export function LandingBanner() {
 }
 
 interface BannerSlideProps {
-	src: string;
+	media_uuid?: string;
 	title?: string;
 	description?: string;
 }
 
 function BannerSlide({
-	src,
+	media_uuid,
 	title="Brand name",
-	description="Коллекция зима-осень теперь доступна!",
+	description,
+	// description="Коллекция зима-осень теперь доступна!",
 }: Readonly<BannerSlideProps>) {
+	const apiBase = useApiUrl();
+
 	return (
-		<div className="w-full h-full p-10 flex flex-col select-none"
-		style={{backgroundImage: `url(${src})`}}
+		<div className="w-full h-full p-10 flex flex-col select-none bg-cover bg-center"
+		style={{backgroundImage: `url(${apiBase}/api/v1/media/${media_uuid}`}}
 		>
 			<div className="text-white mt-auto self-start space-y-4">
 				<h1 className={`uppercase text-4xl font-grafita`}>{title}</h1>
