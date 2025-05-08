@@ -49,13 +49,15 @@ export default function RootLayout({
 		<html lang="ru">
 			<body
 				className={`${gilroy.className} font-light ${grafita.variable} antialiased
-				max-w-screen flex flex-col items-center min-h-screen gap-4`}
+				max-w-screen w-screen overflow-x-hidden`}
 			>
-				<ExclusivityHeader/>
-				<div className="flex flex-col grow w-full items-center">
-					{children}
+				<div className="flex flex-col items-center max-w-screen w-screen min-h-screen gap-8">
+					<ExclusivityHeader/>
+					<div className="flex flex-col grow w-full items-center gap-8">
+						{children}
+					</div>
+					<ExclusivityFooter/>
 				</div>
-				<ExclusivityFooter/>
 			</body>
 		</html>
 	);

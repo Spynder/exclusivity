@@ -1,19 +1,20 @@
 "use client";
 
 import { Goods } from "@entities";
-import { useApi } from "@hooks";
 import { GoodsButton } from "@ui";
+import { cn } from "@utils/cn";
 
 interface GoodsGridProps {
 	goods: Goods[],
-	editing?: boolean
+	editing?: boolean,
+	className?: string
 }
 
 export function GoodsGrid({
-	goods, editing
+	goods, editing, className
 }: Readonly<GoodsGridProps>) {
 	return (
-		<div className="container grid grid-cols-3 gap-4 py-20">
+		<div className={cn("container grid gap-4 grid-cols-2 md:grid-cols-3 md:px-0", className)}>
 			{ editing && 
 				<GoodsButton createButton/>
 			}

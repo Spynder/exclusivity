@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 * {
-  outline: 1px solid #8883;
+  /outline: 1px solid #8883;
 }
 
 :root {
@@ -25,6 +25,13 @@
     --foreground: #ededed;
   }
 } */
+
+@layer components {
+  .container {
+    @apply px-4 md:px-0;
+  }
+}
+
 
 body {
   background: var(--background);

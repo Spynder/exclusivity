@@ -17,8 +17,8 @@ export function MediaImage({
 
 	if(media_uuid) {
 		return (
-			<button className={cn("h-full w-full relative", className)} onClick={onClick}>
-				<img src={`${apiBase}/api/v1/media/${media_uuid}`} alt="Logo" className="object-cover w-full h-full" />
+			<button className={cn("w-full h-full relative", className)} onClick={onClick}>
+				<img src={`${apiBase}/api/v1/media/${media_uuid}`} alt="Logo" className="object-cover w-full aspect-square h-full" />
 			</button>
 		)
 	}

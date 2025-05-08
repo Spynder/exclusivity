@@ -62,6 +62,12 @@ async def create_goods(
 	db: db_dependency,
 	brand_uuid: UUID = Depends(get_current_brand)
 ):
+	
+	amount = len(goods_data.media_uuid)
+	
+	if amount > 3:
+		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Too many images")
+	
 	medias = db.query(Media).filter(Media.uuid.in_(goods_data.media_uuid)).all()
 
 	if len(medias) != len(goods_data.media_uuid):
@@ -94,18 +100,26 @@ async def update_goods(
 	uuid: UUID,
 	brand_uuid: UUID = Depends(get_current_brand)
 ):
+	# Check if supplied amount of images is valid
+	amount = len(goods_data.media_uuid)
+	if amount > 3:
+		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Too many images")
+	
+	# Check if goods exist
 	goods = db.query(Goods).filter(Goods.uuid == uuid).first()
-
 	if not goods:
 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Goods not found")
-
+	# And user is the owner of them
 	if goods.brand_uuid != brand_uuid:
-		raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, status="Not the owner of goods")
+		raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not the owner of goods")
 	
-	medias = db.query(Media).filter(Media.uuid in goods_data.media_uuid).all()
-
+	# And also is the owner of all the images
+	medias = db.query(Media).filter(Media.uuid.in_(goods_data.media_uuid)).all()
 	if len(medias) != len(goods_data.media_uuid):
-		raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, status="Not the owner of media")
+		raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not the owner of media")
+	
+	# Unbind all previous images
+	db.query(Media).filter(Media.refers_to_uuid == goods.images_uuid).update({"refers_to_uuid": None})
 
 	for media in medias:
 		media.refers_to_uuid = goods.images_uuid

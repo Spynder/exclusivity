@@ -19,20 +19,20 @@ export function GoodsButton({
 
 	return (
 		<Link
-		className="flex flex-col space-y-2 w-full text-left border-none bg-transparent p-0"
+		className="flex flex-col w-full text-left border-none bg-transparent p-0"
 		href={createButton ? "/goods/create" : `/goods/${editing ? "edit/" : ""}${goods?.uuid}`}
 		tabIndex={0}
 		>
-			<div className="aspect-square w-full">
+			<div className="aspect-square w-full h-fit">
 				{createButton ? (
 					<div className="h-full w-full bg-gray-100 flex items-center justify-center">
 						<Plus width={50} height={50}/>
 					</div>
 				) : (
-					<MediaImage media_uuid={media[0]} className="aspect-square" />
+					<MediaImage media_uuid={media[0]} className="aspect-square cursor-pointer" />
 				)}
 			</div>
-			<div className="flex flex-row justify-between text-gray-800 text-xl font-medium">
+			<div className="flex flex-col gap-2 md:flex-row justify-between text-gray-800 text-xl font-medium">
 				{createButton ? (<>
 					<span>Новый товар</span>
 					<span className="me-2">+</span>

@@ -13,10 +13,10 @@ export default function Home() {
 			<LandingBanner/>
 			<BrandGrid brands={brands ?? []}/>
 			<InvitationBanner/>
-			<GoodsGrid goods={goods ?? []}/>
+			<GoodsGrid goods={goods ?? []} />
 			<LandingBanner/>
 			<BrandGrid brands={brands ?? []}/>
-			<GoodsGrid goods={goods ?? []}/>
+			<GoodsGrid goods={goods ?? []} />
 		</>
 	)
 }

@@ -2,126 +2,14 @@
 
 import { MediaImage, TextInput } from "@ui";
 import apiFetch from "@utils/apiFetch";
+import { GoodsView } from "@widgets";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 export default function NewGoodsPage() {
 	const router = useRouter();
 
-	const fileInputRef = useRef<HTMLInputElement>(null);
-	const [name, setName] = useState<string>("");
-	const [description, setDescription] = useState<string>("");
-	const [price, setPrice] = useState<string>("");
-	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-	const [images, setImages] = useState<(string | undefined)[]>([undefined, undefined, undefined]);
-
-	function changePrice(value: string) {
-		const parsed = parseInt(value);
-		if(isNaN(parsed)) {
-			setPrice("");
-			return;
-		}
-		const p = Math.abs(parsed);
-		setPrice(p.toString());
-	}
-
-	function saveChanges() {
-		apiFetch({
-			endpoint: "/api/v1/goods",
-			options: {
-				method: "POST",
-			},
-			data: {
-				name,
-				description,
-				price: Number(price),
-				media_uuid: images.filter(x => x)
-			},
-			authorize: true,
-			onSuccess: () => {
-				alert("Добавлен товар");
-				router.push("/brand");
-			},
-			onError: () => {
-				alert("Ошибка при сохранении изменений");
-			}
-		});
-	}
-
-	function uploadImage(file: File, index: number) {
-		async function onSuccess(res: Response) {
-			const uuid = (await res.json()).uuid as string;
-			setImages((prev) => {
-				const copy = prev.slice();
-				copy[index] = uuid;
-				return copy;
-			});
-		}
-
-		const uploadData = new FormData();
-		uploadData.append("file", file);
-		
-		apiFetch({
-			endpoint: `/api/v1/media/image`,
-			data: uploadData,
-			options: {
-				method: "POST"
-			},
-			authorize: true,
-			onSuccess
-		})
-	}
-
-	function triggerUploadImage(index: number) {
-		setSelectedImageIndex(index);
-		fileInputRef.current?.click();
-	}
-
 	return (
-		<div className="container flex flex-col gap-2">
-			<input 
-				type="file" 
-				ref={fileInputRef}
-				accept=".jpg,.jpeg,.png,.svg" 
-				className="hidden"
-				onChange={(e) => {
-					if (e.target.files?.[0]) {
-						uploadImage(e.target.files[0], selectedImageIndex);
-					}
-				}}
-			/>
-			<div className="flex h-auto aspect-[3.1/1] gap-2 justify-between max-w-full">
-				{
-					images.map((uuid, i) => (
-						<MediaImage
-							key={`media${i}`} media_uuid={uuid}
-							className="aspect-square cursor-pointer" onClick={() => triggerUploadImage(i)}
-						/>
-					))
-				}
-			</div>
-				
-			<div className="flex flex-col container gap-2 text-xl font-medium">
-				<div className="flex items-center gap-2">
-					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Название: </span>
-					<TextInput end value={name} change={(value) => setName(value)}/>
-				</div>
-				<div className="flex items-center gap-2">
-					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Описание: </span>
-					<TextInput end value={description} change={(value) => setDescription(value)}/>
-				</div>
-				<div className="flex items-center gap-2">
-					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Цена: </span>
-					<TextInput end type="number" value={price} placeholder="Введите стоимость" change={(value) => changePrice(value)}/>
-				</div>
-			</div>
-
-			<button
-			className="bg-foreground text-white text-xl px-4 py-3 border-0 w-full cursor-pointer"
-			onClick={saveChanges}
-			>
-				Добавить
-			</button>
-		</div>
+		<GoodsView editing />
 	)
 }

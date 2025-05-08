@@ -51,7 +51,7 @@ export default function MyBrandPage() {
 	}
 
 	return (
-		<>
+		<div className="flex flex-col gap-10">
 			<div className="container flex flex-col gap-8">
 				<div className="flex h-65 gap-4 justify-between">
 					
@@ -60,15 +60,15 @@ export default function MyBrandPage() {
 				</div>
 					
 				<div className="flex flex-col container gap-2 text-xl font-medium">
-					<div className="flex items-center gap-2">
+					<div className="flex items-top gap-2">
 						<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Название: </span>
 						<TextInput end value={brandName} change={(value) => setBrandName(value)} />
 					</div>
-					<div className="flex items-center gap-2">
+					<div className="flex items-top gap-2">
 						<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Описание: </span>
-						<TextInput end value={brandDescription} change={(value) => setBrandDescription(value)} />
+						<TextInput end multiline value={brandDescription} change={(value) => setBrandDescription(value)} />
 					</div>
-					<div className="flex items-center gap-2">
+					<div className="flex items-top gap-2">
 						<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Социальные сети: </span>
 						<TextInput end value={socialLinks} change={(value) => setSocialLinks(value)} />
 					</div>
@@ -82,7 +82,7 @@ export default function MyBrandPage() {
 				</button>
 			</div>
 			<GoodsGrid goods={goods} editing/>
-		</>
+		</div>
 	)
 }
 
@@ -132,11 +132,11 @@ function UploadLogo({brand_logo_uuid}: Readonly<{brand_logo_uuid?: string}>) {
 
 	return (
 		<div className="max-w-2/5 flex gap-4">
-			<MediaImage className="aspect-square" media_uuid={media?.[0]}/>
+			<MediaImage className="aspect-square w-min" media_uuid={media?.[0]}/>
 			<div className="flex flex-col gap-2 uppercase text-foreground/50 font-medium">
 				<span className="text-black text-xl">Логотип/Аватар</span>
 				<div className="flex">
-					<p className="w-20">Формат: </p><span className="text-black">SVG, PNG, JPG</span>
+					<p className="w-20">Формат: </p><span className="text-black">PNG, JPG</span>
 				</div>
 				<div className="flex">
 					<p className="w-20">Размер: </p><span className="text-black">Не более 8 МБ</span>
@@ -145,7 +145,7 @@ function UploadLogo({brand_logo_uuid}: Readonly<{brand_logo_uuid?: string}>) {
 					<input 
 						type="file" 
 						ref={fileInputRef}
-						accept=".jpg,.jpeg,.png,.svg" 
+						accept=".jpg,.jpeg,.png" 
 						className="hidden"
 						onChange={(e) => {
 							if (e.target.files?.[0]) {
@@ -259,7 +259,7 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 					<span>Баннеры</span><span>{media?.length ?? 0}/4</span>
 				</div>
 				<div className="flex">
-					<p className="w-20">Формат: </p><span className="text-black">SVG, PNG, JPG</span>
+					<p className="w-20">Формат: </p><span className="text-black">PNG, JPG</span>
 				</div>
 				<div className="flex flex-col">
 					<p className="w-20">Размер: </p>
@@ -278,7 +278,7 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 					<input 
 						type="file" 
 						ref={fileInputRef}
-						accept=".jpg,.jpeg,.png,.svg" 
+						accept=".jpg,.jpeg,.png" 
 						className="hidden"
 						onChange={(e) => {
 							if (e.target.files?.[0]) {
