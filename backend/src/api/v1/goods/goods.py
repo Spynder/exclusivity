@@ -131,3 +131,23 @@ async def update_goods(
 	db.commit()
 	
 	return JSONResponse(status_code=status.HTTP_200_OK, content="Goods updated successfully")
+
+@goods_router.delete("/{uuid}")
+async def delete_goods(
+	db: db_dependency,
+	uuid: UUID,
+	brand_uuid: UUID = Depends(get_current_brand)
+):
+	# Check if goods exist
+	goods = db.query(Goods).filter(Goods.uuid == uuid).first()
+	if not goods:
+		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Goods not found")
+	# And user is the owner of them
+	if goods.brand_uuid != brand_uuid:
+		raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not the owner of goods")
+	
+	
+	db.delete(goods)
+	db.commit()
+	
+	return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content="Goods deleted successfully")

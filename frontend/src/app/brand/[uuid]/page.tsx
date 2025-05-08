@@ -13,23 +13,23 @@ export default function BrandPage() {
 
 	const { data } = useApi<BrandData>(`/api/v1/brand/${params.uuid}`);
 	return (
-		<div className="flex flex-col gap-10">
+		<>
 			<LandingBanner/>
 
 			<BrandView brandData={data}/>
 
-			<div className="flex flex-col gap-4 container">
-				<span className="font-grafita uppercase text-3xl">Популярное у бренда</span>
+			<div className="flex flex-col gap-4">
+				<span className="font-grafita uppercase text-3xl container">Популярное у бренда</span>
 				<GoodsGrid goods={data?.goods.slice(0,3) ?? []} />
 			</div>
-			<div className="flex flex-col gap-4 container">
-				<span className="font-grafita uppercase text-3xl">Каталог</span>
-				<div className="relative">
+			<div className="flex flex-col gap-4">
+				<span className="font-grafita uppercase text-3xl container">Каталог</span>
+				<div className="relative container">
 					<TextInput placeholder="Поиск" />
-					<Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
+					<Search className="absolute right-8 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
 				</div>
-				<GoodsGrid goods={data?.goods ?? []} className="grid-cols-5" />
+				<GoodsGrid goods={data?.goods ?? []} className="grid-cols-2 md:grid-cols-5" />
 			</div>
-		</div>
+		</>
 	)
 }

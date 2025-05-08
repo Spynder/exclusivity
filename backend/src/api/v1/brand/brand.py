@@ -110,3 +110,4 @@ async def update_brand(
 		status_code=200,
 		content={"message": "Brand updated successfully"}
 	)
+

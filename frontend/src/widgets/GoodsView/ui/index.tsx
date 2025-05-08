@@ -4,6 +4,7 @@ import { Goods } from "@entities";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { Button, MediaImage, TextInput } from "@ui";
 import apiFetch from "@utils/apiFetch";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 interface GoodsViewProps {
@@ -21,6 +22,7 @@ export function GoodsView({
 	const selectedImageIndex = useRef(0);
 	const [imageHook, setImageHook] = useState<string>();
 	const { media, setMedia } = useReferringMedia(imageHook, [undefined, undefined, undefined]);
+	const router = useRouter();
 	
 
 	useEffect(() => {
@@ -45,9 +47,9 @@ export function GoodsView({
 
 	function saveChanges() {
 		apiFetch({
-			endpoint: `/api/v1/goods${editing ? "/" + goods?.uuid : ""}`,
+			endpoint: `/api/v1/goods${goods ? "/" + goods?.uuid : ""}`,
 			options: {
-				method: editing ? "PUT" : "POST",
+				method: goods ? "PUT" : "POST",
 			},
 			data: {
 				name,
@@ -98,7 +100,20 @@ export function GoodsView({
 	}
 
 	function deleteGoods() {
-		// TODO
+		apiFetch({
+			endpoint: `/api/v1/goods/${goods?.uuid}`,
+			options: {
+				method: "DELETE"
+			},
+			authorize: true,
+			onSuccess: () => {
+				alert("Удален товар");
+				router.push("/brand/my")
+			},
+			onError: () => {
+				alert("Ошибка при удалении");
+			}
+		});
 	}
 
 
@@ -128,10 +143,11 @@ export function GoodsView({
 			</div>
 				
 			<div className="flex flex-col container gap-2 text-xl font-medium">
-				<div className="flex items-center gap-2">
+				<div className="flex md:items-center gap-2 flex-col md:flex-row">
 					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Название: </span>
 					{editing ? (
-						<TextInput end
+						<TextInput
+						className="md:text-end"
 						value={name} placeholder="Название товара"
 						change={(value) => setName(value)}
 						/>
@@ -139,10 +155,11 @@ export function GoodsView({
 						<p className="text-end w-full">{name}</p>
 					)}
 				</div>
-				<div className="flex items-center gap-2">
+				<div className="flex md:items-center gap-2 flex-col md:flex-row">
 					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Описание: </span>
 					{editing ? (
-						<TextInput end
+						<TextInput
+						className="md:text-end"
 						value={description} placeholder="Не более 500 символов"
 						maxLength={500}
 						change={(value) => setDescription(value)}
@@ -151,10 +168,11 @@ export function GoodsView({
 						<p className="text-end w-full">{description}</p>
 					)}
 				</div>
-				<div className="flex items-center gap-2">
+				<div className="flex md:items-center gap-2 flex-col md:flex-row">
 					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Цена: </span>
 					{editing ? (
-						<TextInput end type="number"
+						<TextInput type="number"
+						className="md:text-end"
 						value={price} placeholder="Введите стоимость"
 						change={(value) => changePrice(value)}
 						/>
@@ -165,7 +183,7 @@ export function GoodsView({
 			</div>
 
 			{goods && editing && (
-				<div className="flex gap-4">
+				<div className="flex gap-4 flex-col-reverse md:flex-row">
 					<Button onClick={deleteGoods} className="grow" light>
 						Удалить
 					</Button>
@@ -173,6 +191,12 @@ export function GoodsView({
 						Сохранить изменения
 					</Button>
 				</div>
+			)}
+
+			{!goods && editing && (
+				<Button onClick={saveChanges} className="grow">
+					Добавить
+				</Button>
 			)}
 		</div>
 	)
