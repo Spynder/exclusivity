@@ -6,6 +6,8 @@ from starlette import status
 from src.service import MediaService
 from src.database import Media, Brand, db_dependency
 from src.utils import get_current_brand
+from fastapi.responses import FileResponse
+from src.config import configuration
 
 media_router = APIRouter(
 	prefix="/media"
@@ -21,13 +23,12 @@ async def get_media(
 	if not media:
 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
 	
-	if not media.media_data:
-		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media data is empty")
+	file_path = configuration.media_files_params.media_path + str(uuid)
 	
-	return Response(
-		content=media.media_data,
-		media_type="image/*"
-	)
+	try:
+		return FileResponse(file_path)
+	except FileNotFoundError:
+		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
 
 
 @media_router.get("/referring/{uuid}")

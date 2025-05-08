@@ -65,7 +65,7 @@ async def get_brand(
 ):
 	brand = db.query(Brand).filter(Brand.uuid == uuid).first()
 	if brand is None:
-		raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="No brand with this id")
+		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No brand with this id")
 	
 	brand_model = BrandModel(
 		uuid=brand.uuid,

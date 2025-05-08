@@ -1,4 +1,5 @@
 import { Button } from "@ui";
+import Link from "next/link";
 
 
 export default function ServicesPage() {
@@ -82,7 +83,9 @@ export default function ServicesPage() {
 				</h2>
 			</div>
 
-			<Button>Приобрести</Button>
+			<Link href="https://t.me/ignatovi4">
+				<Button>Приобрести</Button>
+			</Link>
 		</div>
 	)
 }

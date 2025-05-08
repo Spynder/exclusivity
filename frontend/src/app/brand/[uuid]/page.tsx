@@ -18,13 +18,14 @@ export default function BrandPage() {
 
 			<BrandView brandData={data}/>
 
-			<div className="flex flex-col gap-4">
-				<span className="font-grafita uppercase text-3xl container">Популярное у бренда</span>
+			<div className="flex flex-col gap-4 w-full container">
+				<span className="font-grafita uppercase text-3xl self-start">Популярное у бренда</span>
 				<GoodsGrid goods={data?.goods.slice(0,3) ?? []} />
 			</div>
-			<div className="flex flex-col gap-4">
-				<span className="font-grafita uppercase text-3xl container">Каталог</span>
-				<div className="relative container">
+			
+			<div className="flex flex-col gap-4 w-full container">
+				<span className="font-grafita uppercase text-3xl self-start">Каталог</span>
+				<div className="relative">
 					<TextInput placeholder="Поиск" />
 					<Search className="absolute right-8 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
 				</div>

@@ -10,11 +10,11 @@ export default function Home() {
 
 	return (
 		<>
-			<LandingBanner uuid={""}/>
+			<LandingBanner uuid={"2b1657be-1b07-4cd1-83d2-2242c8b44fe3"}/>
 			<BrandGrid brands={brands ?? []}/>
 			<InvitationBanner/>
 			<GoodsGrid goods={goods ?? []} />
-			<LandingBanner uuid={""}/>
+			<LandingBanner uuid={"2b1657be-1b07-4cd1-83d2-2242c8b44fe3"}/>
 			<BrandGrid brands={brands ?? []}/>
 			<GoodsGrid goods={goods ?? []} />
 		</>

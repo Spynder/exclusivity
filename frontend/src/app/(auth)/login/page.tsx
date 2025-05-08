@@ -41,7 +41,7 @@ export default function LoginPage() {
 
     return (
         <div className="container grow flex flex-col items-center justify-center">
-            <div className="flex flex-col items-center justify-center p-8 gap-4 md:w-[30vw]">
+            <div className="flex flex-col items-center justify-center md:p-8 gap-4 w-full md:w-[30vw]">
                 <div className="flex gap-2 text-2xl font-medium justify-between w-full text-center">
                     <Link href="/register" className="basis-0 grow p-3">Регистрация</Link>
                     <Link href="#" className="border-b-2 basis-0 grow p-3">Вход</Link>

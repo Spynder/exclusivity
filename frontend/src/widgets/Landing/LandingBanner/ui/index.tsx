@@ -25,7 +25,7 @@ export function LandingBanner({
 		console.log(mediaUUID)
 	}, [data]);
 
-	if(!media || !media.length) return null;
+	if(!media?.length) return null;
 
 	return (
 		<div className="w-full h-[60vh]">

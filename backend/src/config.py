@@ -8,7 +8,7 @@ load_dotenv(dotenv_path=
 )
 
 @dataclass(frozen=True)
-class PasswordHashParam:
+class PasswordHashParams:
 	rounds: int = 12
 
 @dataclass(frozen=True)
@@ -29,13 +29,17 @@ class DatabaseParams:
     def build_url(self) -> str:
         return f"{self.driver}://{self.username}:{self.password}@{self.host}:{self.port}/{self.database_name}"
 	 
+@dataclass(frozen=True)
+class MediaFilesParams:
+	media_path = "/app/media/"
 
 
 @dataclass(frozen=True)
 class Configuration:
 	db_params: DatabaseParams = field(default_factory=DatabaseParams)
 	jwt_params: JwtTokenParams = field(default_factory=JwtTokenParams)
-	password_hash_params: PasswordHashParam = field(default_factory=PasswordHashParam)
+	password_hash_params: PasswordHashParams = field(default_factory=PasswordHashParams)
+	media_files_params: MediaFilesParams = field(default_factory=MediaFilesParams)
 
 
 configuration = Configuration()

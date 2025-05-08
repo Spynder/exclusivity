@@ -32,7 +32,6 @@ class Media(Base):
 	uuid = Column(UUID, primary_key=True, index=True, default=uuid4)
 	brand_uuid = Column(UUID, ForeignKey("brands.uuid"))
 	refers_to_uuid = Column(UUID, index=True)
-	media_data = Column(LargeBinary)
 	
 	
 class Goods(Base):

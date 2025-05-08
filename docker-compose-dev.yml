@@ -9,6 +9,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
+      - media-volume:/app/media
     environment:
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -41,6 +42,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
 volumes:
+  media-volume:
   postgres-data:
 
 networks:
