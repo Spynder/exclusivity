@@ -19,11 +19,11 @@ class JwtTokenParams:
 
 @dataclass(frozen=True)
 class DatabaseParams:
-    username: str = "postgres"
-    password: str = os.environ.get("DB_PASSWORD")
-    host: str = "localhost"
+    username: str = os.environ.get("POSTGRES_USER")
+    password: str = os.environ.get("POSTGRES_PASSWORD")
+    host: str = "postgres-db"
     port: int = 5432
-    database_name: str = "Exclusivity"
+    database_name: str = os.environ.get("POSTGRES_DB")
     driver: str = "postgresql"
 
     def build_url(self) -> str:
