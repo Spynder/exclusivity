@@ -1,0 +1,21 @@
+services:
+  backend:
+    image: python:3.12
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DB_PASSWORD: ${DB_PASSWORD}
+    command: ["uvicorn", "main:main", "--port", "8000", "--host", "0.0.0.0"]
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
