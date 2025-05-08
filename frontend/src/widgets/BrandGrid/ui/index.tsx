@@ -18,7 +18,7 @@ export function BrandGrid({
 			{
 				brands.map((brandData) => (
 					<BrandButton
-					key={brandData.brand.uuid}
+					key={brandData.brand?.uuid}
 					brandData={brandData}
 					/>
 				))

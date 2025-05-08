@@ -9,7 +9,7 @@ interface BrandViewProps {
 export function BrandView({
 	brandData
 }: Readonly<BrandViewProps>) {
-	const { media } = useReferringMedia(brandData?.brand.brand_logo_uuid);
+	const { media } = useReferringMedia(brandData?.brand?.brand_logo_uuid);
 	return (
 		<div className="container border border-muted-gray p-5 flex gap-6 min-h-50 flex-col md:flex-row">
 
@@ -17,15 +17,15 @@ export function BrandView({
 			<div className="grow flex flex-col justify-between gap-5">
 				<div className="flex flex-col md:flex-row items-top gap-2">
 					<span className="w-60 text-foreground opacity-50 whitespace-nowrap uppercase">Название бренда: </span>
-					<span className="md:text-end w-full uppercase text-2xl font-medium">{brandData?.brand.brand_name}</span>
+					<span className="md:text-end w-full uppercase text-2xl font-medium">{brandData?.brand?.brand_name}</span>
 				</div>
 				<div className="flex flex-col md:flex-row items-top gap-2 grow">
 					<span className="w-60 text-foreground opacity-50 whitespace-nowrap uppercase">Описание: </span>
-					<p className="md:text-end w-full">{brandData?.brand.brand_description}</p>
+					<p className="md:text-end w-full">{brandData?.brand?.brand_description}</p>
 				</div>
 				<div className="flex flex-col md:flex-row items-top gap-2">
 					<span className="w-60 text-foreground opacity-50 whitespace-nowrap uppercase">Социальные сети: </span>
-					{brandData?.brand.social_links?.map((link) => (
+					{brandData?.brand?.social_links?.map((link) => (
 						<p className="md:text-end w-full" key={link}>{link}</p>
 					)) }
 				</div>

@@ -9,10 +9,10 @@ interface BrandButtonProps {
 }
 
 export function BrandButton({brandData}: Readonly<BrandButtonProps>) {
-	const { media } = useReferringMedia(brandData.brand.brand_logo_uuid);
+	const { media } = useReferringMedia(brandData.brand?.brand_logo_uuid);
 
 	return (
-		<Link href={`/brand/${brandData.brand.uuid}`} className="flex flex-col space-y-2">
+		<Link href={`/brand/${brandData.brand?.uuid}`} className="flex flex-col space-y-2">
 			<div className="aspect-square md:aspect-auto md:h-52 w-full">
 				{
 					media ? (
@@ -24,9 +24,9 @@ export function BrandButton({brandData}: Readonly<BrandButtonProps>) {
 					)
 				}
 			</div>
-			<span className="text-2xl font-medium uppercase">{brandData.brand.brand_name}</span>
+			<span className="text-2xl font-medium uppercase">{brandData.brand?.brand_name}</span>
 			<div className="flex flex-col md:flex-row justify-between text-gray-600">
-				<span>{brandData.brand.brand_description}</span>
+				<span>{brandData.brand?.brand_description}</span>
 				<span>{brandData.goods.length} позиций в каталоге</span>
 			</div>
 		</Link>
