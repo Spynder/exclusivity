@@ -9,6 +9,7 @@ import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperClass } from "swiper/types";
 import { GoodsGrid } from "@widgets";
+import { Trash, Upload } from "lucide-react";
 
 export default function MyBrandPage() {
     const { data } = useApi<BrandData>("/api/v1/brand/my", {
@@ -52,7 +53,7 @@ export default function MyBrandPage() {
 	return (
 		<div className="container flex flex-col gap-10 w-full">
 			<div className=" flex flex-col gap-8">
-				<div className="flex h-50 gap-4 justify-between">
+				<div className="flex h-60 gap-4 justify-between">
 					
 					<UploadLogo brand_logo_uuid={data?.brand?.brand_logo_uuid} />
 					<UploadBanner brand_banners_uuid={data?.brand?.brand_banners_uuid} />
@@ -176,22 +177,27 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [selectedBanner, setSelectedBanner] = useState(0);
 	const [selectedType, setSelectedType] = useState<"pc" | "mobile">("pc");
+	const [newBanner, setNewBanner] = useState(false);
 	const [refreshes, setRefreshes] = useState(0);
 
 	useEffect(() => {
 		let roundedBanner = (selectedBanner + media.length) % media.length;
 		roundedBanner = isNaN(roundedBanner) ? 0 : roundedBanner;
 		setSelectedBanner(roundedBanner);
-	}, [media]);
+	}, [media])
 
 	function uploadTypedBanner(file: File) {
 		// Handle the uploaded file here
 		console.log("File received:", file);
 
-		async function onSuccess(res: Response) {
-			setSelectedBanner(media.length);
-			setRefreshes((x) => x+1);
+		async function refreshBanners() {
+			setRefreshes(x => x+1);
 			refresh();
+		}
+
+		async function openNewPage() {
+			setSelectedBanner(media.length);
+			await refreshBanners();
 		}
 
 		const uploadData = new FormData();
@@ -204,10 +210,10 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 				method: "POST"
 			},
 			authorize: true,
-			onSuccess
+			onSuccess: openNewPage
 		}
 
-		if(media[selectedBanner]) {
+		if(media[selectedBanner] && !newBanner) {
 			config = {
 				endpoint: `/api/v1/media/banner/${media[selectedBanner]}/${selectedType}`,
 				data: uploadData,
@@ -215,7 +221,7 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 					method: "PUT"
 				},
 				authorize: true,
-				onSuccess
+				onSuccess: refreshBanners
 			}
 		}
 		
@@ -225,15 +231,8 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 	function deleteBanner(type: "pc" | "mobile") {
 		if(!media) return;
 
-		function onSuccess(res: Response) {
-			// setMedia((prev) => {
-			// 	const copy = prev
-			// 	copy.splice(selectedBanner, 1);
-			// 	return copy;
-			// });
-			
-			//setSelectedBanner(media.length-2);
-			setRefreshes((x) => x+1);
+		async function onSuccess() {
+			setRefreshes(x => x+1); // TODO shit code 
 			refresh();
 		}
 		
@@ -249,22 +248,45 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 
 	function triggerUpload(type: "pc" | "mobile") {
 		setSelectedType(type);
+		setNewBanner(false);
 		fileInputRef.current?.click();
 	}
 
+	useEffect(() => {
+		setRefreshes(x => x+1);
+	}, [selectedBanner]);
+
 	return (
-		<div className="flex gap-4">
-			<div className="aspect-[1316/513] h-full" suppressHydrationWarning>
+		<div className="flex gap-4 h-full">
+			<div className="aspect-[1693/513] h-full" suppressHydrationWarning>
 				<div className="flex justify-between w-full h-full gap-2">
-					<div className="min-w-20 relative">
-						<MediaImage media_uuid={media[0]} force="pc" refreshes={refreshes}/>
-						<button className="absolute top-5 left-5" onClick={() => triggerUpload("pc")}>Upload</button>
-						<button className="absolute top-15 left-5" onClick={() => deleteBanner("pc")}>Delete</button>
+					<div className="min-w-20 relative aspect-[1316/513]">
+						<MediaImage media_uuid={media[selectedBanner]} force="pc" refreshes={refreshes}/>
+						<button className="absolute top-5 left-17 w-10 h-10 bg-white flex items-center justify-center cursor-pointer" onClick={() => triggerUpload("pc")}>
+							<Upload />
+						</button>
+						<button className="absolute top-5 left-5 w-10 h-10 bg-white flex items-center justify-center cursor-pointer" onClick={() => deleteBanner("pc")}>
+							<Trash className="text-red-600"/>
+						</button>
+						<div className="relative bottom-5 right-5">
+							{media.map((image, i) => (
+								<button
+								key={image ?? "image"+i}
+								className="w-4 h-4 absolute bg-white rounded-full bottom-0 cursor-pointer"
+								style={{right: 24*i, opacity: (selectedBanner === i) ? 1 : 0.5}}
+								onClick={() => setSelectedBanner(i)}
+								/>
+							))}
+						</div>
 					</div>
-					<div className="min-w-20 relative">
-						<MediaImage media_uuid={media[0]} force="mobile" refreshes={refreshes}/>
-						<button className="absolute top-5 left-5" onClick={() => triggerUpload("mobile")}>Upload</button>
-						<button className="absolute top-15 left-5" onClick={() => deleteBanner("mobile")}>Delete</button>
+					<div className="min-w-20 relative aspect-[377/513]">
+						<MediaImage media_uuid={media[selectedBanner]} force="mobile" refreshes={refreshes}/>
+						<button className="absolute top-5 left-17 w-10 h-10 bg-white flex items-center justify-center cursor-pointer" onClick={() => triggerUpload("mobile")}>
+							<Upload />
+						</button>
+						<button className="absolute top-5 left-5 w-10 h-10 bg-white flex items-center justify-center cursor-pointer" onClick={() => deleteBanner("mobile")}>
+							<Trash className="text-red-600"/>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -304,8 +326,12 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 					/>
 
 					<button
-					className="underline uppercase text-black cursor-pointer"
-					onClick={() => fileInputRef.current?.click()}
+					className="underline uppercase text-black cursor-pointer disabled:opacity-50"
+					disabled={media.length>=4}
+					onClick={() => {
+						setNewBanner(true)
+						fileInputRef.current?.click()
+					}}
 					>
 						Добавить новый
 					</button>

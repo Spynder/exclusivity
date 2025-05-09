@@ -16,16 +16,16 @@ interface MediaImageProps {
 export function MediaImage({
 	media_uuid, className, onClick, force, refreshes
 }: Readonly<MediaImageProps>) {
-	const { url, refresh } = useResponsiveMediaImage(media_uuid, force);
+	const { url, ready, refresh } = useResponsiveMediaImage(media_uuid, force);
 
 	useEffect(() => {
 		refresh();
-	}, [refreshes]);
+	}, [refreshes])
 
-	if(media_uuid) {
+	if(ready) {
 		return (
 			<button className={cn("w-full h-full relative", className)} onClick={onClick}>
-				<img src={url} alt="Logo" className="object-cover w-full aspect-square h-full" />
+				<img src={url + "?" + refreshes} alt="Logo" className="object-cover w-full aspect-square h-full"/>
 			</button>
 		)
 	}

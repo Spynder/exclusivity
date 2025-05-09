@@ -75,8 +75,9 @@ async def compliment_banner(
 	if media.brand_uuid != brand_uuid:
 		raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not the owner")
 	
-	if (type=="pc" and media.uuid_pc) or (type=="mobile" and media.uuid_mobile):
-		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Media already exists")
+	# override!!! TODO
+	#if (type=="pc" and media.uuid_pc) or (type=="mobile" and media.uuid_mobile):
+	#	raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Media already exists")
 
 	brand_banners_uuid = db.query(Brand).filter(Brand.uuid == brand_uuid).first().brand_banners_uuid
 
@@ -118,6 +119,8 @@ async def get_media_typed(
 	uuid: UUID
 ):
 	media = db.query(Media).filter(Media.uuid == uuid).first()
+	if not media:
+		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
 
 	media_uuid = None
 	if type=="pc":

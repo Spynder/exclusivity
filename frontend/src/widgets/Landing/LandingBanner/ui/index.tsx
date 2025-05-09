@@ -61,11 +61,11 @@ function BannerSlide({
 	description,
 	// description="Коллекция зима-осень теперь доступна!",
 }: Readonly<BannerSlideProps>) {
-	const media_url = useResponsiveMediaImage(media_uuid);
+	const { url, ready } = useResponsiveMediaImage(media_uuid);
 
 	return (
 		<div className="w-full h-full p-10 flex flex-col select-none bg-cover bg-center"
-		style={{backgroundImage: `url(${media_url}`}}
+		style={{backgroundImage: `url(${url}`}}
 		>
 			<div className="text-white mt-auto self-start space-y-4">
 				<h1 className={`uppercase text-4xl font-grafita`}>{title}</h1>

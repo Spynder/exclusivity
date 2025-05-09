@@ -14,7 +14,7 @@ class MediaService:
 		db: db_dependency,
 		uuid: UUID
 	):
-		medias = db.query(Media).filter(Media.refers_to_uuid == uuid).all()
+		medias = db.query(Media).filter(Media.refers_to_uuid == uuid).order_by(Media.created_at).all()
 		
 		return [media.uuid for media in medias]
 
