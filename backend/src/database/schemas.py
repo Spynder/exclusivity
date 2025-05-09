@@ -30,6 +30,8 @@ class Media(Base):
 	__tablename__ = "media"
 
 	uuid = Column(UUID, primary_key=True, index=True, default=uuid4)
+	uuid_pc = Column(UUID, index=True)
+	uuid_mobile = Column(UUID, index=True)
 	brand_uuid = Column(UUID, ForeignKey("brands.uuid"))
 	refers_to_uuid = Column(UUID, index=True)
 	

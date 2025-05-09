@@ -1,7 +1,7 @@
 "use client";
 
 import { Fullscreen } from "lucide-react";
-import { useApiUrl } from "@hooks";
+import { useResponsiveMediaImage } from "@hooks";
 import { cn } from "@utils/cn";
 
 interface MediaImageProps {
@@ -13,12 +13,12 @@ interface MediaImageProps {
 export function MediaImage({
 	media_uuid, className, onClick
 }: Readonly<MediaImageProps>) {
-	const apiBase = useApiUrl();
+	const media_url = useResponsiveMediaImage(media_uuid);
 
 	if(media_uuid) {
 		return (
 			<button className={cn("w-full h-full relative", className)} onClick={onClick}>
-				<img src={`${apiBase}/api/v1/media/${media_uuid}`} alt="Logo" className="object-cover w-full aspect-square h-full" />
+				<img src={media_url} alt="Logo" className="object-cover w-full aspect-square h-full" />
 			</button>
 		)
 	}

@@ -32,7 +32,7 @@ async def get_goods_of_brand(
 async def get_brand(
 	db: db_dependency,
 ):
-	brands = db.query(Brand).all()
+	brands = db.query(Brand).order_by(Brand.updated_at).all()
 
 	return [
 		BrandResponse(

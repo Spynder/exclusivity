@@ -33,6 +33,10 @@ class DatabaseParams:
 class MediaFilesParams:
 	media_path = "/app/media/"
 
+@dataclass(frozen=True)
+class TelegramParams:
+	token: str = os.environ.get("TELEGRAM_BOT_TOKEN")
+	admin_id: str = os.environ.get("TELEGRAM_ADMIN_ID")
 
 @dataclass(frozen=True)
 class Configuration:
@@ -40,6 +44,7 @@ class Configuration:
 	jwt_params: JwtTokenParams = field(default_factory=JwtTokenParams)
 	password_hash_params: PasswordHashParams = field(default_factory=PasswordHashParams)
 	media_files_params: MediaFilesParams = field(default_factory=MediaFilesParams)
+	telegram_params: TelegramParams = field(default_factory=TelegramParams)
 
 
 configuration = Configuration()

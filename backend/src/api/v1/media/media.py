@@ -13,22 +13,44 @@ media_router = APIRouter(
 	prefix="/media"
 )
 
-@media_router.get("/{uuid}")
-async def get_media(
+@media_router.get("/pc/{uuid}")
+async def get_media_pc(
 	db: db_dependency,
 	uuid: UUID
 ):
 	media = db.query(Media).filter(Media.uuid == uuid).first()
-	
-	if not media:
+
+	media_uuid = media.uuid_pc if media.uuid_pc else media.uuid_mobile
+
+	if not media_uuid:
 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
-	
-	file_path = configuration.media_files_params.media_path + str(uuid)
+
+	file_path = configuration.media_files_params.media_path + str(media_uuid)
 	
 	try:
 		return FileResponse(file_path)
 	except FileNotFoundError:
 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
+@media_router.get("/mobile/{uuid}")
+async def get_media_mobile(
+	db: db_dependency,
+	uuid: UUID
+):
+	media = db.query(Media).filter(Media.uuid == uuid).first()
+
+	media_uuid = media.uuid_mobile if media.uuid_mobile else media.uuid_pc
+
+	if not media_uuid:
+		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
+	file_path = configuration.media_files_params.media_path + str(media_uuid)
+	
+	try:
+		return FileResponse(file_path)
+	except FileNotFoundError:
+		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
 
 
 @media_router.get("/referring/{uuid}")
@@ -90,6 +112,8 @@ async def delete_media(
 	if media.brand_uuid != brand_uuid:
 		raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not the owner")
 	
+	# delete image file from filesystem TODO
+
 	db.delete(media)
 	db.commit()
 	

@@ -10,3 +10,4 @@ pydantic-settings==2.8.1
 pydantic_core==2.27.2
 email_validator==2.2.0
 PyJWT==2.10.1
+python-telegram-bot==22.0

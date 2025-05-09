@@ -4,8 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import { BrandData } from '@entities';
-import { useApi, useApiUrl } from '@hooks';
-import { useReferringMedia } from '@shared/hooks/useReferringMedia';
+import { useApi, useResponsiveMediaImage, useReferringMedia } from '@hooks';
 import { useEffect, useState } from 'react';
 
 interface LandingBannerProps {
@@ -62,11 +61,11 @@ function BannerSlide({
 	description,
 	// description="Коллекция зима-осень теперь доступна!",
 }: Readonly<BannerSlideProps>) {
-	const apiBase = useApiUrl();
+	const media_url = useResponsiveMediaImage(media_uuid);
 
 	return (
 		<div className="w-full h-full p-10 flex flex-col select-none bg-cover bg-center"
-		style={{backgroundImage: `url(${apiBase}/api/v1/media/${media_uuid}`}}
+		style={{backgroundImage: `url(${media_url}`}}
 		>
 			<div className="text-white mt-auto self-start space-y-4">
 				<h1 className={`uppercase text-4xl font-grafita`}>{title}</h1>

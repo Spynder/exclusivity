@@ -21,7 +21,7 @@ goods_router = APIRouter(
 async def get_goods(
 	db: db_dependency
 ):
-	brands = db.query(Goods).all()
+	brands = db.query(Goods).order_by(Goods.updated_at).all()
 	return [GoodsModel(
         uuid=brand.uuid,
         brand_uuid=brand.brand_uuid,

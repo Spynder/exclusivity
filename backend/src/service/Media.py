@@ -1,8 +1,10 @@
 import os
+from typing import Literal
 from uuid import UUID, uuid4
 from starlette import status
 
 from fastapi import File, HTTPException, UploadFile
+from src.models.responses import MediaResponse
 from src.config import configuration
 from src.database import Media, db_dependency
 
@@ -22,8 +24,10 @@ class MediaService:
 		db: db_dependency,
 		brand_uuid: UUID,
 		refers_to_uuid: UUID,
-		file: UploadFile = File(...)
+		file: UploadFile = File(...),
+		type: Literal["pc", "mobile"] = "pc"
 	):
+		# WARNING: Potential for attack with big files.
 		contents = await file.read()
 
 		if len(contents) > 4*1024*1024:
@@ -34,15 +38,23 @@ class MediaService:
 
 		await file.seek(0)
 
+		filename = uuid4()
 
 		new_media = Media(
 			uuid=uuid4(),
 			brand_uuid=brand_uuid,
 			refers_to_uuid=refers_to_uuid
 		)
+
+		if type == "pc":
+			new_media.uuid_pc     = filename
+			print(filename, "pc")
+		else:
+			new_media.uuid_mobile = filename
+			print(filename, "mobile")
 		
 		os.makedirs(configuration.media_files_params.media_path, exist_ok=True)
-		path = configuration.media_files_params.media_path + str(new_media.uuid)
+		path = configuration.media_files_params.media_path + str(filename)
 		print("Saving to", path)
 
 		with open(path, "wb") as f:
