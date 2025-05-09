@@ -4,14 +4,13 @@ import { BrandData, Goods } from "@entities";
 import { useApi } from "@hooks"
 import { GoodsButton, MediaImage, TextInput } from "@ui";
 import apiFetch from "@utils/apiFetch";
-import { useEffect, useRef, useState } from "react";
+import { Component, useEffect, useRef, useState } from "react";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperClass } from "swiper/types";
 import { GoodsGrid } from "@widgets";
 
 export default function MyBrandPage() {
-
     const { data } = useApi<BrandData>("/api/v1/brand/my", {
         authorize: true
     });
@@ -51,9 +50,9 @@ export default function MyBrandPage() {
 	}
 
 	return (
-		<div className="flex flex-col gap-10">
-			<div className="container flex flex-col gap-8">
-				<div className="flex h-65 gap-4 justify-between">
+		<div className="container flex flex-col gap-10 w-full">
+			<div className=" flex flex-col gap-8">
+				<div className="flex h-50 gap-4 justify-between">
 					
 					<UploadLogo brand_logo_uuid={data?.brand?.brand_logo_uuid} />
 					<UploadBanner brand_banners_uuid={data?.brand?.brand_banners_uuid} />
@@ -176,40 +175,54 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 	const { media, setMedia, refresh } = useReferringMedia(brand_banners_uuid);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [selectedBanner, setSelectedBanner] = useState(0);
-	const swiperRef = useRef<SwiperClass>(null);
+	const [selectedType, setSelectedType] = useState<"pc" | "mobile">("pc");
+	const [refreshes, setRefreshes] = useState(0);
 
 	useEffect(() => {
 		let roundedBanner = (selectedBanner + media.length) % media.length;
 		roundedBanner = isNaN(roundedBanner) ? 0 : roundedBanner;
 		setSelectedBanner(roundedBanner);
-		swiperRef.current?.update();
-		swiperRef.current?.slideTo(roundedBanner);
 	}, [media]);
 
-	function uploadBanner(file: File) {
+	function uploadTypedBanner(file: File) {
 		// Handle the uploaded file here
 		console.log("File received:", file);
 
 		async function onSuccess(res: Response) {
 			setSelectedBanner(media.length);
+			setRefreshes((x) => x+1);
 			refresh();
 		}
 
 		const uploadData = new FormData();
 		uploadData.append("file", file);
-		
-		apiFetch({
-			endpoint: `/api/v1/media/banner`,
+
+		let config = {
+			endpoint: `/api/v1/media/banner/${selectedType}`,
 			data: uploadData,
 			options: {
 				method: "POST"
 			},
 			authorize: true,
 			onSuccess
-		})
+		}
+
+		if(media[selectedBanner]) {
+			config = {
+				endpoint: `/api/v1/media/banner/${media[selectedBanner]}/${selectedType}`,
+				data: uploadData,
+				options: {
+					method: "PUT"
+				},
+				authorize: true,
+				onSuccess
+			}
+		}
+		
+		apiFetch(config)
 	}
 
-	function deleteBanner() {
+	function deleteBanner(type: "pc" | "mobile") {
 		if(!media) return;
 
 		function onSuccess(res: Response) {
@@ -219,12 +232,13 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 			// 	return copy;
 			// });
 			
-			setSelectedBanner(media.length-2);
+			//setSelectedBanner(media.length-2);
+			setRefreshes((x) => x+1);
 			refresh();
 		}
 		
 		apiFetch({
-			endpoint: `/api/v1/media/${media[selectedBanner]}`,
+			endpoint: `/api/v1/media/${type}/${media[selectedBanner]}`,
 			options: {
 				method: "DELETE"
 			},
@@ -233,24 +247,26 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 		})
 	}
 
+	function triggerUpload(type: "pc" | "mobile") {
+		setSelectedType(type);
+		fileInputRef.current?.click();
+	}
+
 	return (
 		<div className="flex gap-4">
 			<div className="aspect-[1316/513] h-full" suppressHydrationWarning>
-				<Swiper
-					slidesPerView="auto"
-					spaceBetween={50}
-					loop={true}
-					className="w-full h-full"
-					onSwiper={(swiper) => swiperRef.current = swiper}
-					onSlideChange={(swiper) => setSelectedBanner(
-						isNaN(swiper.realIndex) ? 0 : swiper.realIndex)}
-					>
-						{media?.map((uuid) => (
-							<SwiperSlide key={uuid}>
-								<MediaImage className="w-full" media_uuid={uuid}/>
-							</SwiperSlide>
-						))}
-				</Swiper>
+				<div className="flex justify-between w-full h-full gap-2">
+					<div className="min-w-20 relative">
+						<MediaImage media_uuid={media[0]} force="pc" refreshes={refreshes}/>
+						<button className="absolute top-5 left-5" onClick={() => triggerUpload("pc")}>Upload</button>
+						<button className="absolute top-15 left-5" onClick={() => deleteBanner("pc")}>Delete</button>
+					</div>
+					<div className="min-w-20 relative">
+						<MediaImage media_uuid={media[0]} force="mobile" refreshes={refreshes}/>
+						<button className="absolute top-5 left-5" onClick={() => triggerUpload("mobile")}>Upload</button>
+						<button className="absolute top-15 left-5" onClick={() => deleteBanner("mobile")}>Delete</button>
+					</div>
+				</div>
 			</div>
 			
 			
@@ -282,7 +298,7 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 						className="hidden"
 						onChange={(e) => {
 							if (e.target.files?.[0]) {
-								uploadBanner(e.target.files[0]);
+								uploadTypedBanner(e.target.files[0]);
 							}
 						}}
 					/>
@@ -293,12 +309,12 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 					>
 						Добавить новый
 					</button>
-					<button
+					{/* <button
 					className="underline uppercase text-black cursor-pointer"
 					onClick={() => deleteBanner()}
 					>
 						Удалить
-					</button>
+					</button> */}
 				</div>
 			</div>
 		</div>

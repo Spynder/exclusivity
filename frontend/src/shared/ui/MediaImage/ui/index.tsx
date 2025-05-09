@@ -3,22 +3,29 @@
 import { Fullscreen } from "lucide-react";
 import { useResponsiveMediaImage } from "@hooks";
 import { cn } from "@utils/cn";
+import { useEffect } from "react";
 
 interface MediaImageProps {
 	media_uuid?: string;
 	className?: string;
 	onClick?: () => void;
+	force?: "pc" | "mobile";
+	refreshes?: number;
 }
 
 export function MediaImage({
-	media_uuid, className, onClick
+	media_uuid, className, onClick, force, refreshes
 }: Readonly<MediaImageProps>) {
-	const media_url = useResponsiveMediaImage(media_uuid);
+	const { url, refresh } = useResponsiveMediaImage(media_uuid, force);
+
+	useEffect(() => {
+		refresh();
+	}, [refreshes]);
 
 	if(media_uuid) {
 		return (
 			<button className={cn("w-full h-full relative", className)} onClick={onClick}>
-				<img src={media_url} alt="Logo" className="object-cover w-full aspect-square h-full" />
+				<img src={url} alt="Logo" className="object-cover w-full aspect-square h-full" />
 			</button>
 		)
 	}

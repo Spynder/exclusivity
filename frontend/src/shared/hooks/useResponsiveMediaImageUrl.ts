@@ -3,24 +3,24 @@
 import { useEffect, useState } from "react";
 import { useApiUrl } from "./useApiUrl";
 
-export function useResponsiveMediaImage(uuid?: string) {
+export function useResponsiveMediaImage(uuid?: string, force?: "pc" | "mobile") {
 	const apiBase = useApiUrl();
 	const [url, setUrl] = useState<string>();
 
+	function refresh() {
+		const type = force ?? ((window.innerWidth >= 768) ? "pc" : "mobile");
+		setUrl(`${apiBase}/api/v1/media/${type}${force ? "-only" : ""}/${uuid}`);
+	}
+
 	useEffect(() => {
-		const handleResize = () => {
-			const type = (window.innerWidth >= 768) ? "pc" : "mobile";
-			setUrl(`${apiBase}/api/v1/media/${type}/${uuid}`);
-		};
+		refresh();
 	
-		handleResize();
-	
-		window.addEventListener('resize', handleResize);
+		window.addEventListener('resize', refresh);
 	
 		return () => {
-			window.removeEventListener('resize', handleResize);
+			window.removeEventListener('resize', refresh);
 		};
-	}, [apiBase, uuid]);
+	}, [apiBase, uuid, force]);
 
-	return url;
+	return {url, refresh};
 }

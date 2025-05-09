@@ -25,9 +25,10 @@ class MediaService:
 		brand_uuid: UUID,
 		refers_to_uuid: UUID,
 		file: UploadFile = File(...),
-		type: Literal["pc", "mobile"] = "pc"
+		type: Literal["pc", "mobile"] = "pc",
+		media: Media | None = None
 	):
-		# WARNING: Potential for attack with big files.
+		# WARNING: Potential attack with big files.
 		contents = await file.read()
 
 		if len(contents) > 4*1024*1024:
@@ -40,30 +41,30 @@ class MediaService:
 
 		filename = uuid4()
 
-		new_media = Media(
-			uuid=uuid4(),
-			brand_uuid=brand_uuid,
-			refers_to_uuid=refers_to_uuid
-		)
+		editing_media = media
+		if not editing_media:
+			editing_media = Media(
+				uuid=uuid4(),
+				brand_uuid=brand_uuid,
+				refers_to_uuid=refers_to_uuid
+			)
 
 		if type == "pc":
-			new_media.uuid_pc     = filename
-			print(filename, "pc")
+			editing_media.uuid_pc     = filename
 		else:
-			new_media.uuid_mobile = filename
-			print(filename, "mobile")
-		
+			editing_media.uuid_mobile = filename
+
 		os.makedirs(configuration.media_files_params.media_path, exist_ok=True)
 		path = configuration.media_files_params.media_path + str(filename)
-		print("Saving to", path)
 
 		with open(path, "wb") as f:
 			f.write(contents)
 
-		db.add(new_media)
+		if not media: db.add(editing_media)
 		db.commit()
-		db.refresh(new_media)
+		db.refresh(editing_media)
 		
 		return {
-			"uuid": new_media.uuid,
+			"uuid": editing_media.uuid,
 		}
+	
