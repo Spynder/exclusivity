@@ -14,7 +14,7 @@ export function GoodsGrid({
 	goods, editing, className
 }: Readonly<GoodsGridProps>) {
 	return (
-		<div className={cn("container grid gap-4 grid-cols-2 md:grid-cols-3 md:px-0", className)}>
+		<div className={cn("grid gap-4 grid-cols-2 md:grid-cols-3 md:px-0", className)}>
 			{ editing && 
 				<GoodsButton createButton/>
 			}

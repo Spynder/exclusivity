@@ -1,6 +1,7 @@
 import { BrandData } from "@entities";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { MediaImage } from "@ui";
+import { formatURL } from "@utils/formatURL";
 
 interface BrandViewProps {
 	brandData?: BrandData
@@ -27,7 +28,7 @@ export function BrandView({
 					<span className="w-60 text-foreground opacity-50 whitespace-nowrap uppercase">Социальные сети: </span>
 					<div className="flex flex-col grow gap-2">
 						{brandData?.brand?.social_links?.map((link) => (
-							<a href={`//${link}`} className="md:text-end hover:underline" key={link}>{link}</a>
+							<a href={`${formatURL(link)}`} className="md:text-end hover:underline" key={link}>{link}</a>
 						))}
 					</div>
 				</div>

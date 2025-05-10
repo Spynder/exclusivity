@@ -20,7 +20,7 @@ export default function LoginPage() {
             const json = (await res.json()) as Tokens;
             setCookie('access_token', json.access_token);
             setCookie('refresh_token', json.refresh_token);
-            router.push('/profile');
+            router.push('/brand/my');
         }
 
         async function error(res?: Response) {

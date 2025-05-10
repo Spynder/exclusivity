@@ -1,11 +1,13 @@
 "use client";
 
-import { Goods } from "@entities";
+import { Brand, Goods } from "@entities";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { Button, MediaImage, TextInput } from "@ui";
 import apiFetch from "@utils/apiFetch";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode } from 'swiper/modules';
 
 interface GoodsViewProps {
 	goods?: Goods,
@@ -118,7 +120,7 @@ export function GoodsView({
 
 
 	return (
-		<div className="container flex flex-col gap-2">
+		<div className="flex flex-col gap-2 items-center w-full">
 			<input 
 				type="file" 
 				ref={fileInputRef}
@@ -130,7 +132,7 @@ export function GoodsView({
 					}
 				}}
 			/>
-			<div className="flex h-auto aspect-[3.1/1] gap-2 justify-between max-w-full">
+			<div className="hidden md:flex container h-auto aspect-[3.1/1] gap-2 justify-between">
 				{
 					media.concat([undefined, undefined, undefined]).slice(0,3)
 					.map((uuid, i) => (
@@ -141,10 +143,39 @@ export function GoodsView({
 					))
 				}
 			</div>
+			<div className="md:hidden h-60 w-full">
+				<Swiper
+				slidesPerView="auto"
+				slidesOffsetBefore={16}
+				slidesOffsetAfter={16}
+				spaceBetween={10}
+				modules={[FreeMode]}
+				freeMode
+				>
+					{
+						media.concat([undefined, undefined, undefined]).slice(0,3)
+						.map((uuid, i) => (
+							<SwiperSlide key={uuid} className="aspect-square h-full !w-fit">
+								<MediaImage
+									key={uuid ?? `media-${i}`} media_uuid={uuid}
+									className={`!aspect-square h-full !w-60 ${editing && "cursor-pointer"}`} onClick={() => triggerUploadImage(i)}
+								/>
+							</SwiperSlide>
+						))
+					}
+				</Swiper>
+			</div>
 				
 			<div className="flex flex-col container gap-2 text-xl font-medium">
+				{!editing && (
+					<div className="flex md:items-center gap-2 flex-col md:flex-row">
+						<span className="w-60 text-foreground opacity-50 whitespace-nowrap">Бренд: </span>
+						<p className="md:text-end w-full">{goods?.brand_name}</p>
+					</div>
+				)}
+				
 				<div className="flex md:items-center gap-2 flex-col md:flex-row">
-					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Название: </span>
+					<span className="w-60 text-foreground opacity-50 whitespace-nowrap">Название: </span>
 					{editing ? (
 						<TextInput
 						className="md:text-end"
@@ -152,11 +183,11 @@ export function GoodsView({
 						change={(value) => setName(value)}
 						/>
 					) : (
-						<p className="text-end w-full">{name}</p>
+						<p className="md:text-end w-full">{name}</p>
 					)}
 				</div>
 				<div className="flex md:items-center gap-2 flex-col md:flex-row">
-					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Описание: </span>
+					<span className="w-60 text-foreground opacity-50 whitespace-nowrap">Описание: </span>
 					{editing ? (
 						<TextInput
 						className="md:text-end"
@@ -165,11 +196,11 @@ export function GoodsView({
 						change={(value) => setDescription(value)}
 						/>
 					) : (
-						<p className="text-end w-full">{description}</p>
+						<p className="md:text-end w-full">{description}</p>
 					)}
 				</div>
 				<div className="flex md:items-center gap-2 flex-col md:flex-row">
-					<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Цена: </span>
+					<span className="w-60 text-foreground opacity-50 whitespace-nowrap">Цена: </span>
 					{editing ? (
 						<TextInput type="number"
 						className="md:text-end"
@@ -177,7 +208,7 @@ export function GoodsView({
 						change={(value) => changePrice(value)}
 						/>
 					) : (
-						<p className="text-end w-full">{price} ₽</p>
+						<p className="md:text-end w-full">{price} ₽</p>
 					)}
 				</div>
 			</div>

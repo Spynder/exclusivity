@@ -8,7 +8,7 @@ import { Component, useEffect, useRef, useState } from "react";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperClass } from "swiper/types";
-import { GoodsGrid } from "@widgets";
+import { GoodsGrid, InvitationBanner } from "@widgets";
 import { Trash, Upload } from "lucide-react";
 
 export default function MyBrandPage() {
@@ -51,38 +51,45 @@ export default function MyBrandPage() {
 	}
 
 	return (
-		<div className="container flex flex-col gap-10 w-full">
-			<div className=" flex flex-col gap-8">
-				<div className="flex h-60 gap-4 justify-between">
-					
-					<UploadLogo brand_logo_uuid={data?.brand?.brand_logo_uuid} />
-					<UploadBanner brand_banners_uuid={data?.brand?.brand_banners_uuid} />
-				</div>
-					
-				<div className="flex flex-col container gap-2 text-xl font-medium">
-					<div className="flex items-top gap-2">
-						<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Название: </span>
-						<TextInput end value={brandName} change={(value) => setBrandName(value)} />
+		<>
+			<div className="container flex flex-col gap-10 w-full">
+				<div className="flex flex-col gap-8">
+					<div className="flex md:h-60 gap-4 justify-between flex-col md:flex-row">
+						<UploadLogo brand_logo_uuid={data?.brand?.brand_logo_uuid} />
+						<UploadBanner brand_banners_uuid={data?.brand?.brand_banners_uuid} />
 					</div>
-					<div className="flex items-top gap-2">
-						<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Описание: </span>
-						<TextInput end multiline value={brandDescription} change={(value) => setBrandDescription(value)} />
+						
+					<div className="flex flex-col gap-2 text-xl font-medium">
+						<div className="flex flex-col md:flex-row items-top gap-2">
+							<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Название: </span>
+							<TextInput className="md:text-end" value={brandName} change={(value) => setBrandName(value)} />
+						</div>
+						<div className="flex flex-col md:flex-row items-top gap-2">
+							<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Описание: </span>
+							<TextInput className="md:text-end" multiline value={brandDescription} change={(value) => setBrandDescription(value)} />
+						</div>
+						<div className="flex flex-col md:flex-row items-top gap-2">
+							<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Социальные сети: </span>
+							<TextInput className="md:text-end" value={socialLinks} change={(value) => setSocialLinks(value)} />
+						</div>
 					</div>
-					<div className="flex items-top gap-2">
-						<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Социальные сети: </span>
-						<TextInput end value={socialLinks} change={(value) => setSocialLinks(value)} />
-					</div>
-				</div>
 
-				<button
-				className="bg-foreground text-white text-xl px-4 py-3 border-0 w-full cursor-pointer"
-				onClick={saveChanges}
-				>
-					Сохранить
-				</button>
+					<button
+					className="bg-foreground text-white text-xl px-4 py-3 border-0 w-full cursor-pointer"
+					onClick={saveChanges}
+					>
+						Сохранить
+					</button>
+				</div>
 			</div>
-			<GoodsGrid goods={goods} editing/>
-		</div>
+				
+			<InvitationBanner>
+				Хотите видеть свой бренд в нашем каталоге
+			</InvitationBanner>
+			<div className="container">
+				<GoodsGrid goods={goods} editing/>
+			</div>
+		</>
 	)
 }
 
@@ -131,17 +138,19 @@ function UploadLogo({brand_logo_uuid}: Readonly<{brand_logo_uuid?: string}>) {
 	}
 
 	return (
-		<div className="max-w-2/5 flex gap-4">
-			<MediaImage className="aspect-square w-min" media_uuid={media?.[0]}/>
-			<div className="flex flex-col gap-2 uppercase text-foreground/50 font-medium">
+		<div className="md:max-w-2/5 flex flex-col md:flex-row gap-4">
+			<MediaImage className="aspect-square w-min h-60" media_uuid={media?.[0]}/>
+			<div className="flex flex-col gap-4 uppercase text-foreground/50 font-medium">
 				<span className="text-black text-xl">Логотип/Аватар</span>
-				<div className="flex">
-					<p className="w-20">Формат: </p><span className="text-black">PNG, JPG</span>
+				<div className="flex flex-col gap-2">
+					<div className="flex">
+						<p className="w-20">Формат: </p><span className="text-black">PNG, JPG</span>
+					</div>
+					<div className="flex">
+						<p className="w-20">Размер: </p><span className="text-black">Не более 8 МБ</span>
+					</div>
 				</div>
-				<div className="flex">
-					<p className="w-20">Размер: </p><span className="text-black">Не более 8 МБ</span>
-				</div>
-				<div className="flex mt-auto gap-4 font-medium">
+				<div className="flex mt-auto gap-4 font-medium pt-8">
 					<input 
 						type="file" 
 						ref={fileInputRef}
@@ -257,9 +266,9 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 	}, [selectedBanner]);
 
 	return (
-		<div className="flex gap-4 h-full">
-			<div className="aspect-[1693/513] h-full" suppressHydrationWarning>
-				<div className="flex justify-between w-full h-full gap-2">
+		<div className="flex flex-col md:flex-row gap-4 h-full">
+			<div className="md:aspect-[1693/513] h-full" suppressHydrationWarning>
+				<div className="flex justify-between flex-col md:flex-row w-full h-full gap-2">
 					<div className="min-w-20 relative aspect-[1316/513]">
 						<MediaImage media_uuid={media[selectedBanner]} force="pc" refreshes={refreshes}/>
 						<button className="absolute top-5 left-17 w-10 h-10 bg-white flex items-center justify-center cursor-pointer" onClick={() => triggerUpload("pc")}>

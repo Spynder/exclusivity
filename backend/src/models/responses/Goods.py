@@ -5,6 +5,7 @@ from uuid import UUID
 class GoodsModel(BaseModel):
 	uuid: UUID
 	brand_uuid: UUID
+	brand_name: str
 	name: str
 	description: Optional[str] = ""
 	sizes: List[str]

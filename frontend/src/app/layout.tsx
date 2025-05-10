@@ -47,6 +47,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="ru">
+			<head>
+				<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+				<meta name="apple-mobile-web-app-capable" content="yes" />
+			</head>
 			<body
 				className={`${gilroy.className} font-light ${grafita.variable} antialiased
 				max-w-screen w-screen overflow-x-hidden`}

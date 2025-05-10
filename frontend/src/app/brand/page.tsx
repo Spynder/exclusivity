@@ -9,6 +9,8 @@ export default function BrandsPage() {
 	const { data } = useApi<BrandData[]>("/api/v1/brand");
 
 	return (
-		<BrandGrid brands={data ?? []} />
+		<div className="container">
+			<BrandGrid brands={data ?? []} />
+		</div>
 	)
 }

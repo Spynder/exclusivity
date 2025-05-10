@@ -16,16 +16,17 @@ async def get_goods_of_brand(
 		db: db_dependency,
 		brand_uuid: UUID,
 ):
-	goods = db.query(Goods).where(Goods.brand_uuid == brand_uuid).all()
+	goods = db.query(Goods, Brand.brand_name).join(Brand, Brand.uuid == Goods.brand_uuid).where(Goods.brand_uuid == brand_uuid).all()
 	return [GoodsModel(
         uuid=good.uuid,
         brand_uuid=good.brand_uuid,
+		brand_name=brand_name,
         name=good.name,
         description=good.description or "",
         sizes=good.sizes,
         price=good.price,
         images_uuid=good.images_uuid
-	) for good in goods]
+	) for good, brand_name in goods]
 
 
 @brand_router.get("")

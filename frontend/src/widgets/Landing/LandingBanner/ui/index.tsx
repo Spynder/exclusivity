@@ -27,7 +27,7 @@ export function LandingBanner({
 	if(!media?.length) return null;
 
 	return (
-		<div className="w-full h-[60vh]">
+		<div className="w-full h-[513px]">
 			<Swiper
 				slidesPerView="auto"
 				spaceBetween={50}

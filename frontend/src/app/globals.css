@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 * {
-  outline: 1px solid #8883;
+  /* outline: 1px solid #8883; */
 }
 
 :root {

@@ -26,8 +26,8 @@ export function BrandButton({brandData}: Readonly<BrandButtonProps>) {
 			</div>
 			<span className="text-2xl font-medium uppercase">{brandData.brand?.brand_name}</span>
 			<div className="flex flex-col md:flex-row justify-between text-gray-600">
-				<span>{brandData.brand?.brand_description}</span>
-				<span>{brandData.goods.length} позиций в каталоге</span>
+				<span className="line-clamp-2">{brandData.brand?.brand_description}</span>
+				<span className="whitespace-nowrap">{brandData.goods.length} позиций в каталоге</span>
 			</div>
 		</Link>
 

@@ -12,7 +12,7 @@ export function BrandGrid({
 }: Readonly<BrandGridProps>) {
 	return (
 		<div className={cn(
-			"container grid gap-4 grid-cols-2 md:grid-cols-3",
+			"w-full grid gap-4 grid-cols-2 md:grid-cols-3",
 			className
 		)}>
 			{

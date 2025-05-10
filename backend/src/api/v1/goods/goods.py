@@ -6,8 +6,7 @@ from starlette import status
  
 from src.models.responses import GoodsModel
 from src.models.dto import GoodsCreate
-from src.database import Goods, Media
-from src.database import db_dependency
+from src.database import Goods, Media, Brand, db_dependency
 from src.utils import get_current_brand
 
 goods_router = APIRouter(
@@ -21,16 +20,19 @@ goods_router = APIRouter(
 async def get_goods(
 	db: db_dependency
 ):
-	brands = db.query(Goods).order_by(Goods.updated_at).all()
+	goods = db.query(Goods, Brand.brand_name).join(Brand, Goods.brand_uuid == Brand.uuid)\
+		.order_by(Goods.updated_at).all()
+
 	return [GoodsModel(
-        uuid=brand.uuid,
-        brand_uuid=brand.brand_uuid,
-        name=brand.name,
-        description=brand.description or "",
-        sizes=brand.sizes,
-        price=brand.price,
-        images_uuid=brand.images_uuid
-	) for brand in brands]
+        uuid=good.uuid,
+        brand_uuid=good.brand_uuid,
+		brand_name=brand_name,
+        name=good.name,
+        description=good.description or "",
+        sizes=good.sizes,
+        price=good.price,
+        images_uuid=good.images_uuid
+	) for good, brand_name in goods]
 
 @goods_router.get(
 		"/{uuid}",
@@ -40,7 +42,8 @@ async def get_goods_by_uuid(
 	db: db_dependency,
 	uuid: UUID
 ):
-	good = db.query(Goods).where(Goods.uuid == uuid).first()
+	good, brand_name = db.query(Goods, Brand.brand_name).join(Brand, Goods.brand_uuid == Brand.uuid)\
+		.filter(Goods.uuid == uuid).first()
 
 	if not good:
 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Goods not found")
@@ -48,6 +51,7 @@ async def get_goods_by_uuid(
 	return GoodsModel(
         uuid=good.uuid,
         brand_uuid=good.brand_uuid,
+		brand_name=brand_name,
         name=good.name,
         description=good.description or "",
         sizes=good.sizes,

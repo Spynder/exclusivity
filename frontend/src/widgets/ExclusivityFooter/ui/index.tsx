@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export function ExclusivityFooter() {
 	return (
-		<footer className="w-full md:container min-h-45 bg-foreground text-white flex flex-col gap-8 p-4 md:p-10 md:mb-10">
+		<footer className="max-w-screen md:container min-h-45 bg-foreground text-white flex flex-col gap-8 p-4 md:p-10 md:mb-10">
 			<div className="w-full flex flex-col md:flex-row min-h-8 justify-start gap-4">
 				<div>
 					<Image
@@ -26,7 +26,7 @@ export function ExclusivityFooter() {
 					<NavButton href="/profile" authorized>Профиль</NavButton>
 				</div>
 			</div>
-			<div className="w-full text-sm md:text-base flex flex-col md:flex-row justify-between min-h-8 text-gray-400 uppercase gap-4">
+			<div className="max-w-screen w-full text-sm md:text-base flex flex-col md:flex-row justify-between min-h-8 text-gray-400 uppercase gap-4">
 				<div className="flex flex-col gap-2">
 					<Link href="/">Политика конфиденциальности</Link>
 					<Link href="/">Пользовательское соглашение</Link>

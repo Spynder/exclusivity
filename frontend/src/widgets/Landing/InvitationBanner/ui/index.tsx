@@ -2,11 +2,11 @@
 
 import { TextInput } from "@ui";
 
-export function InvitationBanner() {
+export function InvitationBanner({children}: Readonly<{children: string}>) {
 	return (
 		<div className="md:container min-h-60 bg-foreground text-white my-10 p-4 md:p-10 flex flex-col md:flex-row justify-between gap-4 md:gap-0">
 			<div className="flex flex-col gap-4 justify-between">
-				<h1 className="uppercase text-3xl font-grafita">Хотите видеть ваш бренд в нашем каталоге</h1>
+				<h1 className="uppercase text-3xl font-grafita">{children}</h1>
 				<form className="flex flex-col justify-between grow gap-4">
 					<TextInput placeholder="Ваше имя" dark />
 					<div className="flex gap-4">
