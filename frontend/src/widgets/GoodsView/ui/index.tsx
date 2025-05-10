@@ -61,10 +61,19 @@ export function GoodsView({
 			},
 			authorize: true,
 			onSuccess: () => {
-				alert("Добавлен товар");
+				if(!goods) {
+					alert("Товар добавлен.");
+					router.push("/brand/my");
+				} else {
+					alert("Изменения сохранены.");
+				}
 			},
 			onError: () => {
-				alert("Ошибка при сохранении изменений");
+				if(!goods) {
+					alert("Ошибка при добавлении товара.");
+				} else {
+					alert("Ошибка при сохранении изменений.");
+				}
 			}
 		});
 	}
@@ -212,23 +221,25 @@ export function GoodsView({
 					)}
 				</div>
 			</div>
+			
+			<div className="container">
+				{goods && editing && (
+					<div className="flex gap-4 flex-col-reverse md:flex-row">
+						<Button onClick={deleteGoods} className="grow" light>
+							Удалить
+						</Button>
+						<Button onClick={saveChanges} className="grow">
+							Сохранить изменения
+						</Button>
+					</div>
+				)}
 
-			{goods && editing && (
-				<div className="flex gap-4 flex-col-reverse md:flex-row">
-					<Button onClick={deleteGoods} className="grow" light>
-						Удалить
-					</Button>
+				{!goods && editing && (
 					<Button onClick={saveChanges} className="grow">
-						Сохранить изменения
+						Добавить
 					</Button>
-				</div>
-			)}
-
-			{!goods && editing && (
-				<Button onClick={saveChanges} className="grow">
-					Добавить
-				</Button>
-			)}
+				)}
+			</div>
 		</div>
 	)
 }

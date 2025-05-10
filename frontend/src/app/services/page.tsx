@@ -22,55 +22,56 @@ export default function ServicesPage() {
 					</h2>
 				</div>
 			</div>
-
-			<table className="border-collapse w-min">
-				<thead>
-					<tr className="border-b">
-						<th className="p-4 text-left min-w-50 font-medium">Услуга</th>
-						<th className="p-4 text-left min-w-50 font-medium">Длительность</th>
-						<th className="p-4 text-left min-w-50 font-medium">Стоимость</th>
-						<th className="p-4 text-left min-w-50 font-medium">Свободные</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr className="border-b">
-						<td className="p-4 font-medium">Баннер 1 категории</td>
-						<td className="p-4">3 дня</td>
-						<td className="p-4">3000</td>
-						<td className="p-4">6/6</td>
-					</tr>
-					<tr className="border-b">
-						<td className="p-4 font-medium">Лого 1 категории</td>
-						<td className="p-4">3 дня</td>
-						<td className="p-4">3000</td>
-						<td className="p-4">6/6</td>
-					</tr>
-					<tr className="border-b">
-						<td className="p-4 font-medium">Товар 1 категории</td>
-						<td className="p-4">3 дня</td>
-						<td className="p-4">3000</td>
-						<td className="p-4">6/6</td>
-					</tr>
-					<tr className="border-b">
-						<td className="p-4 font-medium">Баннер 2 категории</td>
-						<td className="p-4">3 дня</td>
-						<td className="p-4">3000</td>
-						<td className="p-4">6/6</td>
-					</tr>
-					<tr className="border-b">
-						<td className="p-4 font-medium">Лого 2 категории</td>
-						<td className="p-4">3 дня</td>
-						<td className="p-4">3000</td>
-						<td className="p-4">6/6</td>
-					</tr>
-					<tr className="border-b">
-						<td className="p-4 font-medium">Товар 2 категории</td>
-						<td className="p-4">3 дня</td>
-						<td className="p-4">3000</td>
-						<td className="p-4">6/6</td>
-					</tr>
-				</tbody>
-			</table>
+			<div className="overflow-x-auto py-2">
+				<table className="w-min [&_th,&_td]:border-2 [&_th,&_td]:border-black/10">
+					<thead>
+						<tr>
+							<th className="p-4 text-left min-w-50 font-medium">Услуга</th>
+							<th className="p-4 text-left min-w-50 font-medium">Длительность</th>
+							<th className="p-4 text-left min-w-50 font-medium">Стоимость</th>
+							<th className="p-4 text-left min-w-50 font-medium">Свободные</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td className="p-4 font-medium">Баннер 1 категории</td>
+							<td className="p-4">7 дней</td>
+							<td className="p-4">3000</td>
+							<td className="p-4">4/6</td>
+						</tr>
+						<tr>
+							<td className="p-4 font-medium">Лого 1 категории</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+						</tr>
+						<tr>
+							<td className="p-4 font-medium">Товар 1 категории</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+						</tr>
+						<tr>
+							<td className="p-4 font-medium">Баннер 2 категории</td>
+							<td className="p-4">7 дней</td>
+							<td className="p-4">2000</td>
+							<td className="p-4">6/6</td>
+						</tr>
+						<tr>
+							<td className="p-4 font-medium">Лого 2 категории</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+						</tr>
+						<tr>
+							<td className="p-4 font-medium">Товар 2 категории</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+							<td className="p-4 text-foreground/50">в разработке</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			
 			<div className="flex flex-col gap-2">
 				<h2 className="text-foreground/50">

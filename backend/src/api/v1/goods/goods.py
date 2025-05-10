@@ -22,7 +22,8 @@ async def get_goods(
 ):
 	goods = db.query(Goods, Brand.brand_name).join(Brand, Goods.brand_uuid == Brand.uuid)\
 		.order_by(Goods.updated_at).all()
-
+	
+	#print(*list([(good.name, str(good.created_at)) for good, _ in goods]), sep="\n")
 	return [GoodsModel(
         uuid=good.uuid,
         brand_uuid=good.brand_uuid,

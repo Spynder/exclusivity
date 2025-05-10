@@ -34,8 +34,8 @@ class Media(Base):
 	uuid_mobile = Column(UUID, index=True)
 	brand_uuid = Column(UUID, ForeignKey("brands.uuid"))
 	refers_to_uuid = Column(UUID, index=True)
-	
-	
+
+
 class Goods(Base):
 	__tablename__ = "goods"
 
