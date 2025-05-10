@@ -8,7 +8,7 @@ import { Component, useEffect, useRef, useState } from "react";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperClass } from "swiper/types";
-import { GoodsGrid, InvitationBanner } from "@widgets";
+import { FileTooBigModal, GoodsGrid, InvitationBanner } from "@widgets";
 import { Trash, Upload } from "lucide-react";
 
 export default function MyBrandPage() {
@@ -188,6 +188,7 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 	const [selectedType, setSelectedType] = useState<"pc" | "mobile">("pc");
 	const [newBanner, setNewBanner] = useState(false);
 	const [refreshes, setRefreshes] = useState(0);
+	const [fileErrorModalOpen, setFileErrorModalOpen] = useState(false);
 
 	useEffect(() => {
 		let roundedBanner = (selectedBanner + media.length) % media.length;
@@ -209,6 +210,10 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 			await refreshBanners();
 		}
 
+		function uploadErrorHandler(res?: Response) {
+			if(res?.status === 413) setFileErrorModalOpen(true);
+		}
+
 		const uploadData = new FormData();
 		uploadData.append("file", file);
 
@@ -219,7 +224,8 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 				method: "POST"
 			},
 			authorize: true,
-			onSuccess: openNewPage
+			onSuccess: openNewPage,
+			onError: uploadErrorHandler
 		}
 
 		if(media[selectedBanner] && !newBanner) {
@@ -230,7 +236,8 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 					method: "PUT"
 				},
 				authorize: true,
-				onSuccess: refreshBanners
+				onSuccess: refreshBanners,
+				onError: uploadErrorHandler
 			}
 		}
 		
@@ -321,6 +328,7 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 						</div>
 					</div>
 				</div>
+				<FileTooBigModal open={fileErrorModalOpen} onClose={() => setFileErrorModalOpen(false)}/>
 				<div className="flex mt-auto gap-4 font-medium">
 					<input 
 						type="file" 

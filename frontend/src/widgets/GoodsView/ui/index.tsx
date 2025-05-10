@@ -1,6 +1,6 @@
 "use client";
 
-import { Brand, Goods } from "@entities";
+import { Goods } from "@entities";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
 import { Button, MediaImage, TextInput } from "@ui";
 import apiFetch from "@utils/apiFetch";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from 'swiper/modules';
+import { FileTooBigModal } from "@/widgets/Modals";
 
 interface GoodsViewProps {
 	goods?: Goods,
@@ -24,6 +25,7 @@ export function GoodsView({
 	const selectedImageIndex = useRef(0);
 	const [imageHook, setImageHook] = useState<string>();
 	const { media, setMedia } = useReferringMedia(imageHook, [undefined, undefined, undefined]);
+	const [fileErrorModalOpen, setFileErrorModalOpen] = useState(false);
 	const router = useRouter();
 	
 
@@ -88,6 +90,9 @@ export function GoodsView({
 				return copy;
 			});
 		}
+		function uploadErrorHandler(res?: Response) {
+			if(res?.status === 413) setFileErrorModalOpen(true);
+		}
 
 		const uploadData = new FormData();
 		uploadData.append("file", file);
@@ -99,7 +104,8 @@ export function GoodsView({
 				method: "POST"
 			},
 			authorize: true,
-			onSuccess
+			onSuccess: onSuccess,
+			onError: uploadErrorHandler
 		})
 	}
 
@@ -174,6 +180,7 @@ export function GoodsView({
 					}
 				</Swiper>
 			</div>
+			<FileTooBigModal open={fileErrorModalOpen} onClose={() => setFileErrorModalOpen(false)}/>
 				
 			<div className="flex flex-col container gap-2 text-xl font-medium">
 				{!editing && (

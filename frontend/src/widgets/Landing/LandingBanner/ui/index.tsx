@@ -118,7 +118,7 @@ function BannerSlide({
 		<div className="w-full h-full p-10 flex flex-col select-none bg-cover bg-center"
 		style={{backgroundImage: `url(${url}`}}
 		>
-			<div className="text-white mt-auto self-start space-y-4">
+			<div className="hidden text-white mt-auto self-start space-y-4">
 				<h1 className={`uppercase text-4xl font-grafita`}>{title}</h1>
 				<span>{description}</span>
 			</div>
