@@ -20,8 +20,8 @@ export function Modal({
 		<ReactModal
 		isOpen={open}
 		ariaHideApp={false}
-		overlayClassName={"fixed inset-0 bg-black/50"}
-		className="mx-auto w-min min-w-2/5 min-h-screen flex flex-col justify-center outline-0"
+		overlayClassName={"fixed inset-0 bg-black/50 z-10"}
+		className="mx-auto container w-fit min-w-2/5 min-h-screen flex flex-col justify-center outline-0"
 		>
 			<div className={cn("flex flex-col justify-center bg-white items-center p-8 gap-4 text-center", className)}>
 				{children}
