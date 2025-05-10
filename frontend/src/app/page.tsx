@@ -18,6 +18,7 @@ export default function Home() {
 			if(count >= 3) continue;
 			filtered.push(good);
 		}
+		filtered.sort((a,b) => (a.brand_uuid == "155227d8-58bc-42b6-b365-5c40e93ffa12") ? -1 : 1);
 		setFilteredGoods(filtered);
 	}, [goods]);
 

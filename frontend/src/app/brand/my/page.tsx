@@ -329,6 +329,7 @@ function UploadBanner({brand_banners_uuid}: Readonly<{brand_banners_uuid?: strin
 						className="hidden"
 						onChange={(e) => {
 							if (e.target.files?.[0]) {
+								setSelectedType("pc");
 								uploadTypedBanner(e.target.files[0]);
 							}
 						}}

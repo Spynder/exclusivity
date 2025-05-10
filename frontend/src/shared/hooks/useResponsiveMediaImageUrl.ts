@@ -4,6 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useApiUrl } from "./useApiUrl";
 import apiFetch from "@utils/apiFetch";
 
+interface MediaResponse {
+	uuid_pc?: string;
+	uuid_mobile?: string;
+}
+
 export function useResponsiveMediaImage(uuid?: string, force?: "pc" | "mobile") {
 	const apiBase = useApiUrl();
 	const [url, setUrl] = useState<string>();
@@ -11,14 +16,24 @@ export function useResponsiveMediaImage(uuid?: string, force?: "pc" | "mobile") 
 
 	function refresh() {
 		const type = force ?? ((window.innerWidth >= 768) ? "pc" : "mobile");
-		const newUrl = `/api/v1/media/${type}${force ? "-only" : ""}/${uuid}`;
-		setUrl(newUrl);
+		if(!uuid) return;
+
 		apiFetch({
-			endpoint: newUrl + "?" + Math.floor(Math.random()*10000),
+			endpoint: `/api/v1/media/sizes/${uuid}`,
 			options: {
 				method: "GET"
 			},
-			onSuccess: () => setReady(true),
+			onSuccess: (res: Response) => {
+				res.json().then((json: MediaResponse) => {
+					let media_uuid = (type == "mobile") ? json.uuid_mobile : json.uuid_pc;
+					if(!force && !media_uuid) {
+						media_uuid = (type == "mobile") ? json.uuid_pc : json.uuid_mobile; // swap
+					}
+					if(!media_uuid) return;
+					setUrl(`/api/v1/media/${media_uuid}`);
+					setReady(true);
+				});
+			}
 		});
 		setReady(false);
 	}

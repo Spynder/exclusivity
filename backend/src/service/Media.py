@@ -4,7 +4,6 @@ from uuid import UUID, uuid4
 from starlette import status
 
 from fastapi import File, HTTPException, UploadFile
-from src.models.responses import MediaResponse
 from src.config import configuration
 from src.database import Media, db_dependency
 

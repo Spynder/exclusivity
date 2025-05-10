@@ -9,6 +9,7 @@ from src.database import Media, Brand, db_dependency
 from src.utils import get_current_brand
 from fastapi.responses import FileResponse
 from src.config import configuration
+from src.models import MediaResponse
 
 media_router = APIRouter(
 	prefix="/media"
@@ -112,30 +113,57 @@ async def delete_media(
 	
 	return status.HTTP_202_ACCEPTED
 
-@media_router.get("/{type}/{uuid}")
-async def get_media_typed(
+# @media_router.get("/{type}/{uuid}")
+# async def get_media_typed(
+# 	db: db_dependency,
+# 	type: Literal["pc", "mobile", "pc-only", "mobile-only"],
+# 	uuid: UUID
+# ):
+# 	media = db.query(Media).filter(Media.uuid == uuid).first()
+# 	if not media:
+# 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
+# 	media_uuid = None
+	# if type=="pc":
+	# 	media_uuid = media.uuid_pc if media.uuid_pc else media.uuid_mobile
+	# if type=="pc-only":
+	# 	media_uuid = media.uuid_pc
+	# if type=="mobile":
+	# 	media_uuid = media.uuid_mobile if media.uuid_mobile else media.uuid_pc
+	# if type=="mobile-only":
+	# 	media_uuid = media.uuid_mobile
+
+# 	if not media_uuid:
+# 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
+# 	file_path = configuration.media_files_params.media_path + str(media_uuid)
+	
+# 	try:
+# 		return FileResponse(file_path)
+# 	except FileNotFoundError:
+# 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
+
+@media_router.get("/sizes/{uuid}")
+async def get_media_sizes(
 	db: db_dependency,
-	type: Literal["pc", "mobile", "pc-only", "mobile-only"],
 	uuid: UUID
 ):
 	media = db.query(Media).filter(Media.uuid == uuid).first()
 	if not media:
 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
-
-	media_uuid = None
-	if type=="pc":
-		media_uuid = media.uuid_pc if media.uuid_pc else media.uuid_mobile
-	if type=="pc-only":
-		media_uuid = media.uuid_pc
-	if type=="mobile":
-		media_uuid = media.uuid_mobile if media.uuid_mobile else media.uuid_pc
-	if type=="mobile-only":
-		media_uuid = media.uuid_mobile
-
-	if not media_uuid:
+	if not (media.uuid_pc or media.uuid_mobile): # strange though
 		raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
 
-	file_path = configuration.media_files_params.media_path + str(media_uuid)
+	return MediaResponse(
+		uuid_pc=media.uuid_pc,
+		uuid_mobile=media.uuid_mobile,
+	)
+
+@media_router.get("/{uuid}")
+async def get_media_file(
+	uuid: UUID
+):
+	file_path = configuration.media_files_params.media_path + str(uuid)
 	
 	try:
 		return FileResponse(file_path)
