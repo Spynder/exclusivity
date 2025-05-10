@@ -19,7 +19,7 @@ export default function Home() {
 				</InvitationBanner>
 				<GoodsGrid goods={goods?.slice(0,6) ?? []} />
 			</div>
-			<LandingBanner uuid={"2b1657be-1b07-4cd1-83d2-2242c8b44fe3"}/>
+			<LandingBanner uuid={"e213460f-3abb-4347-9930-e4daa410d851"}/>
 			<div className="container">
 				<BrandGrid brands={brands?.slice(6,12) ?? []}/>
 				<GoodsGrid goods={goods?.slice(6,12) ?? []} />
