@@ -29,7 +29,7 @@ export default function BrandPage() {
 					<TextInput placeholder="Поиск" />
 					<Search className="absolute right-8 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
 				</div>
-				<GoodsGrid goods={data?.goods ?? []} className="grid-cols-2 md:grid-cols-5 &:not(.container}" />
+				<GoodsGrid goods={data?.goods ?? []} className="grid-cols-2 md:grid-cols-5" />
 			</div>
 		</>
 	)

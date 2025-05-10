@@ -21,7 +21,6 @@ export function LandingBanner({
 	useEffect(() => {
 		if(!data) return;
 		setMediaUUID(data.brand?.brand_banners_uuid);
-		console.log(mediaUUID)
 	}, [data]);
 
 	if(!media?.length) return null;
@@ -42,6 +41,58 @@ export function LandingBanner({
 					{media.map((slide) => (
 						<SwiperSlide key={slide}>
 							<BannerSlide media_uuid={slide} title={data?.brand?.brand_name}/>
+						</SwiperSlide>
+					))}
+			</Swiper>
+		</div>
+	)
+}
+
+export function LandingBannerDouble({
+	uuid1, uuid2
+}: Readonly<{
+	uuid1: string;
+	uuid2: string;
+}>) {
+	const { data: data1 } = useApi<BrandData>(`/api/v1/brand/${uuid1}`);
+	const { data: data2 } = useApi<BrandData>(`/api/v1/brand/${uuid2}`);
+	const [mediaUUID1, setMediaUUID1] = useState<string>();
+	const [mediaUUID2, setMediaUUID2] = useState<string>();
+	const { media: media1 } = useReferringMedia(mediaUUID1);
+	const { media: media2 } = useReferringMedia(mediaUUID2);
+
+	useEffect(() => {
+		if(!data1) return;
+		setMediaUUID1(data1.brand?.brand_banners_uuid);
+	}, [data1]);
+	useEffect(() => {
+		if(!data2) return;
+		setMediaUUID2(data2.brand?.brand_banners_uuid);
+	}, [data2]);
+
+	if(!media1?.length || !media2?.length) return null;
+
+	return (
+		<div className="w-full h-[513px]">
+			<Swiper
+				slidesPerView="auto"
+				spaceBetween={50}
+				autoplay={{
+					delay: 2500,
+					disableOnInteraction: false,
+				}}
+				loop={true}
+				className="container h-full"
+				modules={[Autoplay]}
+				>
+					{media1.map((slide) => (
+						<SwiperSlide key={slide}>
+							<BannerSlide media_uuid={slide} title={data1?.brand?.brand_name}/>
+						</SwiperSlide>
+					))}
+					{media2.map((slide) => (
+						<SwiperSlide key={slide}>
+							<BannerSlide media_uuid={slide} title={data2?.brand?.brand_name}/>
 						</SwiperSlide>
 					))}
 			</Swiper>

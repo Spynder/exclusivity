@@ -2,7 +2,7 @@
 
 import { BrandData, Goods } from "@entities";
 import { useApi } from "@hooks";
-import { LandingBanner, BrandGrid, InvitationBanner, GoodsGrid } from "@widgets";
+import { LandingBannerDouble, BrandGrid, InvitationBanner, GoodsGrid } from "@widgets";
 
 export default function Home() {
 	const { data: brands } = useApi<BrandData[]>("/api/v1/brand");
@@ -10,7 +10,7 @@ export default function Home() {
 
 	return (
 		<>
-			<LandingBanner uuid={"155227d8-58bc-42b6-b365-5c40e93ffa12"}/>
+			<LandingBannerDouble uuid1={"155227d8-58bc-42b6-b365-5c40e93ffa12"} uuid2={"e213460f-3abb-4347-9930-e4daa410d851"}/>
 			<div className="container">
 				<BrandGrid brands={brands?.slice(0,6) ?? []}/>
 				
@@ -19,7 +19,7 @@ export default function Home() {
 				</InvitationBanner>
 				<GoodsGrid goods={goods?.slice(0,6) ?? []} />
 			</div>
-			<LandingBanner uuid={"e213460f-3abb-4347-9930-e4daa410d851"}/>
+			<LandingBannerDouble uuid1={"e213460f-3abb-4347-9930-e4daa410d851"} uuid2={"155227d8-58bc-42b6-b365-5c40e93ffa12"}/>
 			<div className="container">
 				<BrandGrid brands={brands?.slice(6,12) ?? []}/>
 				<GoodsGrid goods={goods?.slice(6,12) ?? []} />
