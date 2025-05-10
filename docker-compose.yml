@@ -29,6 +29,15 @@ services:
     ports:
       - "4000:4000"
   
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+  
   db:
     image: postgres
     container_name: postgres-db
