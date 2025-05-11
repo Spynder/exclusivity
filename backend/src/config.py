@@ -32,6 +32,13 @@ class DatabaseParams:
 @dataclass(frozen=True)
 class MediaFilesParams:
 	media_path = "/app/media/"
+	@dataclass(frozen=True)
+	class MediaLimits:
+		logo: int = 1
+		banners: int = 4
+		images: int = 5
+
+	limits: MediaLimits = field(default_factory=MediaLimits)
 
 @dataclass(frozen=True)
 class TelegramParams:

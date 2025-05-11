@@ -8,7 +8,7 @@ export function ExclusivityHeader() {
 	return (
 		<header className="w-full text-center mt-8">
 			<div className="mx-auto hidden md:container border-b py-4 md:flex items-center justify-between ">
-				<div className="flex space-x-4 grow basis-0">
+				<div className="flex space-x-4 grow basis-0 flex-wrap">
 					<NavButton href="/">Главная</NavButton>
 					<NavButton href="/brand">Бренды</NavButton>
 					<NavButton href="/goods">Каталог</NavButton>
@@ -21,7 +21,7 @@ export function ExclusivityHeader() {
 						fill
 					/>
 				</Link>
-				<div className="flex space-x-4 grow basis-0 justify-end">
+				<div className="flex space-x-4 grow basis-0 justify-end flex-wrap">
 					{/* <NavButton href="/about">О сервисе</NavButton> */}
 					<NavButton href="/brand/my" authorized>Мой бренд</NavButton>
 					<NavButton href="/profile" authorized>Профиль</NavButton>

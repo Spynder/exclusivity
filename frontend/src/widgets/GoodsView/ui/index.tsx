@@ -2,13 +2,12 @@
 
 import { Goods } from "@entities";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
-import { Button, MediaImage, TextInput } from "@ui";
+import { Button, ListEditor, TextInput } from "@ui";
 import apiFetch from "@utils/apiFetch";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode } from 'swiper/modules';
-import { FileTooBigModal } from "@/widgets/Modals";
+import { FileTooBigModal } from "@widgets";
+import { ImageView } from "./ImageView";
 
 interface GoodsViewProps {
 	goods?: Goods,
@@ -22,9 +21,10 @@ export function GoodsView({
 	const [name, setName] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
 	const [price, setPrice] = useState<string>("");
+	const [sizes, setSizes] = useState<string[]>([]);
 	const selectedImageIndex = useRef(0);
 	const [imageHook, setImageHook] = useState<string>();
-	const { media, setMedia } = useReferringMedia(imageHook, [undefined, undefined, undefined]);
+	const { media, setMedia } = useReferringMedia(imageHook, [undefined, undefined, undefined, undefined, undefined]);
 	const [fileErrorModalOpen, setFileErrorModalOpen] = useState(false);
 	const router = useRouter();
 	
@@ -34,6 +34,7 @@ export function GoodsView({
 		setName(goods.name);
 		setDescription(goods.description);
 		setPrice(goods.price.toString());
+		setSizes(goods.sizes);
 		setImageHook(goods.images_uuid);
 	}, [goods])
 
@@ -48,7 +49,6 @@ export function GoodsView({
 		setPrice(p.toString());
 	}
 
-
 	function saveChanges() {
 		apiFetch({
 			endpoint: `/api/v1/goods${goods ? "/" + goods?.uuid : ""}`,
@@ -59,7 +59,8 @@ export function GoodsView({
 				name,
 				description,
 				price: Number(price),
-				media_uuid: media.filter(x => x)
+				media_uuid: media.filter(x => x),
+				sizes,
 			},
 			authorize: true,
 			onSuccess: () => {
@@ -147,39 +148,7 @@ export function GoodsView({
 					}
 				}}
 			/>
-			<div className="hidden md:flex container h-auto aspect-[3.1/1] gap-2 justify-between">
-				{
-					media.concat([undefined, undefined, undefined]).slice(0,3)
-					.map((uuid, i) => (
-						<MediaImage
-							key={uuid ?? `media-${i}`} media_uuid={uuid}
-							className={`aspect-square ${editing && "cursor-pointer"}`} onClick={() => triggerUploadImage(i)}
-						/>
-					))
-				}
-			</div>
-			<div className="md:hidden h-60 w-full">
-				<Swiper
-				slidesPerView="auto"
-				slidesOffsetBefore={16}
-				slidesOffsetAfter={16}
-				spaceBetween={10}
-				modules={[FreeMode]}
-				freeMode
-				>
-					{
-						media.concat([undefined, undefined, undefined]).slice(0,3)
-						.map((uuid, i) => (
-							<SwiperSlide key={uuid} className="aspect-square h-full !w-fit">
-								<MediaImage
-									key={uuid ?? `media-${i}`} media_uuid={uuid}
-									className={`!aspect-square h-full !w-60 ${editing && "cursor-pointer"}`} onClick={() => triggerUploadImage(i)}
-								/>
-							</SwiperSlide>
-						))
-					}
-				</Swiper>
-			</div>
+			<ImageView media={media.concat(editing ? [undefined] : [])} clickable={editing} onImageClick={(i) => triggerUploadImage(i)}/>
 			<FileTooBigModal open={fileErrorModalOpen} onClose={() => setFileErrorModalOpen(false)}/>
 				
 			<div className="flex flex-col container gap-2 text-xl font-medium">
@@ -227,6 +196,11 @@ export function GoodsView({
 						<p className="md:text-end w-full">{price} ₽</p>
 					)}
 				</div>
+				<div className="flex md:items-center gap-2 flex-col md:flex-row">
+					<span className="w-60 text-foreground opacity-50 whitespace-nowrap">Размеры: </span>
+					<ListEditor items={sizes} setItems={setSizes} editing={editing}/>
+				</div>
+				
 			</div>
 			
 			<div className="container">

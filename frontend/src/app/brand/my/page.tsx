@@ -2,7 +2,7 @@
 
 import { BrandData, Goods } from "@entities";
 import { useApi } from "@hooks"
-import { GoodsButton, MediaImage, TextInput } from "@ui";
+import { GoodsButton, ListEditor, MediaImage, TextInput } from "@ui";
 import apiFetch from "@utils/apiFetch";
 import { Component, useEffect, useRef, useState } from "react";
 import { useReferringMedia } from "@shared/hooks/useReferringMedia";
@@ -18,14 +18,14 @@ export default function MyBrandPage() {
 
 	const [brandName, setBrandName] = useState<string>("");
 	const [brandDescription, setBrandDescription] = useState<string>("");
-	const [socialLinks, setSocialLinks] = useState<string>("");
+	const [socialLinks, setSocialLinks] = useState<string[]>([]);
 	const [goods, setGoods] = useState<Goods[]>([]);
 
 	useEffect(() => {
 		if(!data) return;
 		setBrandName(data.brand?.brand_name ?? "");
 		setBrandDescription(data.brand?.brand_description ?? "");
-		setSocialLinks((data.brand?.social_links ?? []).join(', '));
+		setSocialLinks((data.brand?.social_links ?? []));
 		setGoods(data.goods);
 	}, [data]);
 
@@ -38,7 +38,7 @@ export default function MyBrandPage() {
 			data: {
 				brand_name: brandName,
 				brand_description: brandDescription,
-				social_links: socialLinks.split(', '),
+				social_links: socialLinks,
 			},
 			authorize: true,
 			onSuccess: () => {
@@ -70,7 +70,7 @@ export default function MyBrandPage() {
 						</div>
 						<div className="flex flex-col md:flex-row items-top gap-2">
 							<span className="w-60 text-[#161616] opacity-50 whitespace-nowrap">Социальные сети: </span>
-							<TextInput className="md:text-end" value={socialLinks} change={(value) => setSocialLinks(value)} />
+							<ListEditor items={socialLinks} setItems={setSocialLinks} editing />
 						</div>
 					</div>
 

@@ -8,6 +8,7 @@ from src.models.responses import GoodsModel
 from src.models.dto import GoodsCreate
 from src.database import Goods, Media, Brand, db_dependency
 from src.utils import get_current_brand
+from src.config import configuration
 
 goods_router = APIRouter(
 	prefix="/goods"
@@ -70,7 +71,7 @@ async def create_goods(
 	
 	amount = len(goods_data.media_uuid)
 	
-	if amount > 3:
+	if amount > configuration.media_files_params.limits.images:
 		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Too many images")
 	
 	medias = db.query(Media).filter(Media.uuid.in_(goods_data.media_uuid)).all()
@@ -107,7 +108,7 @@ async def update_goods(
 ):
 	# Check if supplied amount of images is valid
 	amount = len(goods_data.media_uuid)
-	if amount > 3:
+	if amount > configuration.media_files_params.limits.images:
 		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Too many images")
 	
 	# Check if goods exist

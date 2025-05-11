@@ -1,4 +1,3 @@
-import { cn } from "@utils/cn";
 import clsx from "clsx";
 import { ButtonHTMLAttributes } from "react";
 
@@ -14,7 +13,7 @@ export function Button({
 			className={clsx(
 				"bg-foreground text-white text-xl px-4 py-3 border-0 w-full cursor-pointer",
 				{"bg-muted-gray text-black!": light},
-				className
+				className,
 			)}
 			{...props}
 		>

@@ -25,7 +25,7 @@ export default function Home() {
 	return (
 		<>
 			<LandingBannerDouble uuid1={"155227d8-58bc-42b6-b365-5c40e93ffa12"} uuid2={"e213460f-3abb-4347-9930-e4daa410d851"}/>
-			<div className="container">
+			<div className="container space-y-5">
 				<BrandGrid brands={brands?.slice(0,6) ?? []}/>
 				
 				<InvitationBanner>
@@ -34,7 +34,7 @@ export default function Home() {
 				<GoodsGrid goods={filteredGoods.slice(0,6)} />
 			</div>
 			<LandingBannerDouble uuid1={"e213460f-3abb-4347-9930-e4daa410d851"} uuid2={"155227d8-58bc-42b6-b365-5c40e93ffa12"}/>
-			<div className="container">
+			<div className="container space-y-5">
 				<BrandGrid brands={brands?.slice(6,12) ?? []}/>
 				<GoodsGrid goods={filteredGoods.slice(6,12)} />
 			</div>

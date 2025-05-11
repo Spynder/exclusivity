@@ -34,7 +34,7 @@ async def upload_logo(
 	amount = len(await MediaService.get_referring(db, brand_logo_uuid))
 	print(amount)
 
-	if amount >= 1:
+	if amount >= configuration.media_files_params.limits.logo:
 		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Profile image already exists")
 
 	return await MediaService.upload(db, brand_uuid, brand_logo_uuid, file)
@@ -54,7 +54,7 @@ async def upload_banner(
 
 	amount = len(await MediaService.get_referring(db, brand_banners_uuid))
 
-	if amount >= 4:
+	if amount >= configuration.media_files_params.limits.banners:
 		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Too many banners")
 
 	return await MediaService.upload(db, brand_uuid, brand_banners_uuid, file, type)
@@ -196,4 +196,4 @@ async def delete_media_typed(
 	
 	db.commit()
 	
-	return status.HTTP_202_ACCEPTED
+	return JSONResponse(status_code=status.HTTP_202_ACCEPTED, content="Media deleted successfully")
